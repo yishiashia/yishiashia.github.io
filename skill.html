@@ -11,29 +11,18 @@
     <script type="text/javascript" src="skills_toURL.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
-<body style="min-height: 650px;">
+<body style="min-height: 600px;">
 
-<style>
-a:link {
-    color: #00ccff;
-}
-a:visited {
-    color: #ff9999;
-}
-</style>
-
-<h2 style="color: #FFF; padding: 20px 20px 20px 55px;">Skill Tree of <span style="color: #00ccff;">yishiashia</span> in 2017</h2>
 <div id="st"></div>
 
-<div style="padding: 20px 20px 20px 55px; position: absolute; top: 600px; color: #FFF; font-weight: bold;">
-Based on <a href="https://github.com/andrienko/skills">skill (Github)</a> project.
+<div style="padding: 20px 20px 20px 55px; position: absolute; top: 575px; color: #FFF; font-weight: bold;">
+Base on <a href="https://github.com/andrienko/skills">skill (Github)</a> project.
 <div>
 </body>
 
 <script type="text/javascript">
 
     $(function(){
-        window.location.hash = '#flask3redis2nginx2docker1jenkins1test_automation2ci_cd3pi1beacon2';
         skilltree.buildFromJSON('trees/web.json',$('#st'));
     })
 

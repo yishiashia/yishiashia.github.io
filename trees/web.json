@@ -1,0 +1,115 @@
+﻿{
+	"flask":{
+		"name":"Flask",
+		"max":3,
+		"pos":[150,200],
+		"hint":[
+		{"level":"0-3", "text":"Basic python flask"},
+		{"level":"1-3", "text":"Lv2. Render MVC pages and basic handle with cookies and sessions"},
+		{"level":"2-3", "text":"Lv3. Using Redis for session handling in a load balanced environment"}
+		],
+		"dependency":{
+			"3":{
+				"redis":2
+			}
+		}
+	},
+	"redis":{
+		"name":"Redis",
+		"max":2,
+		"pos":[50,200],
+		"abbr": "Redis",
+		"hint":[
+			{"level":"0-2", "text":"Basic Redis"},
+			{"level":"1-2", "text":"Building HA Redis cluster with <b>Redis Sentinel</b>"}
+		]
+	},
+	"nginx":{
+		"name":"nginx",
+		"max":2,
+		"pos":[50,300],
+		"abbr": "nginx",
+		"hint":[
+			{"level":"0-3", "text":"Basic web server and reverse proxy server"},
+			{"level":"1-3", "text":"Lv2: Using nginx for UDP Load Balancing"}
+		]
+	},
+	"docker":{
+		"name":"Docker",
+		"max":3,
+		"pos":[50,400],
+		"abbr": "Docker",
+		"hint":[
+			{"level":"0-4", "text":"Basic docker operation (build, run, exec ...etc)"},
+			{"level":"1-4", "text":"Lv2: Using <b>Docker Compose</b> tool and setting up networking between containers"},
+			{"level":"3-4", "text":"Lv3: Understanding chroot"}
+		]
+	},
+	"kubernetes":{
+		"name":"Kubernetes",
+		"max":1,
+		"pos":[150,400],
+		"abbr": "K8S",
+		"hint":[
+			{"text":"Basic kubernetes"}
+		],
+		"dependency":{
+			"1":{
+				"docker":1
+			}
+		}
+	},
+	"jenkins":{
+		"name":"Jenkins",
+		"max":1,
+		"pos":[50,100],
+		"abbr": "Jenkins",
+		"hint":[
+			{"text":"Manage work flow of software developement"}
+		]
+	},
+	"test_automation":{
+		"name":"Test automation",
+		"max":2,
+		"pos":[150,100],
+		"abbr":"TDD",
+		"hint":[
+			{"level":"0-2","text":"Basic test cases management and test automation"}
+		]
+	},
+	"ci_cd":{
+		"name":"CI/CD",
+		"max":3,
+		"pos":[250,100],
+		"abbr":"CI/CD",
+		"hint":[
+			{"level":"0-3","text":"Manage work flow of software developement"},
+			{"level":"1-3","text":"Integrate and build source code automatically"},
+			{"level":"2-3","text":"Test and deploy to the production envirionment"}
+		]
+	},
+	"pi":{
+		"name":"Raspberry Pi",
+		"max":1,
+		"pos":[50,500],
+		"abbr": "Pi",
+		"hint":[
+			{"text":"Basic Raspberry Pi environment setup"}
+		]
+	},
+	"beacon":{
+		"name":"Beacon",
+		"max":2,
+		"pos":[150,500],
+		"abbr": "Beacon",
+		"hint":[
+			{"level":"0-2","text":"Bluetooth BLE interface setup and beacon setting"},
+			{"level":"1-2","text":"Implement an iBeacon App in Swift (iOS)"}
+		],
+		"dependency":{
+			"1":{
+				"pi":1
+			}
+		}
+	}
+}
