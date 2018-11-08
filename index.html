@@ -11,7 +11,7 @@
     <script type="text/javascript" src="skills_toURL.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
-<body style="min-height: 650px;">
+<body style="min-height: 950px;">
 
 <style>
 a:link {
@@ -22,20 +22,23 @@ a:visited {
 }
 </style>
 
-<h2 style="color: #FFF; padding: 20px 20px 20px 55px;">Skill Tree of <span style="color: #00ccff;">yishiashia</span> in 2017</h2>
+<h2 style="color: #FFF; padding: 20px 20px 20px 35px;">Skill Tree of <span style="color: #00ccff;"><a href="https://github.com/yishiashia" target="_blank" rel="noopener noreferrer">yishiashia</a></span> in 2017~<span id="toyear"></span></h2>
 <div id="st"></div>
 
-<div style="padding: 20px 20px 20px 55px; position: absolute; top: 600px; color: #FFF; font-weight: bold;">
-Based on <a href="https://github.com/andrienko/skills">skill (Github)</a> project.
+<div style="padding: 20px 20px 20px 35px; position: absolute; top: 800px; color: #FFF; font-weight: bold;">
+Based on <a href="https://github.com/andrienko/skills" target="_blank" rel="noopener noreferrer">skill (Github)</a> project.
 <div>
 </body>
 
 <script type="text/javascript">
 
     $(function(){
-        window.location.hash = '#flask3redis2nginx2docker1jenkins1test_automation2ci_cd3pi1beacon2';
+        var d = new Date();
+        var n = d.getFullYear();
+        document.getElementById("toyear").innerHTML = n;
+        window.location.hash = '#flask3redis2nginx2docker1jenkins1test_automation2ci_cd3pi1beacon2javascript2';
         skilltree.buildFromJSON('trees/web.json',$('#st'));
-    })
+    });
 
 </script>
 

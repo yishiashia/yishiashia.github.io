@@ -2,7 +2,7 @@
 	"flask":{
 		"name":"Flask",
 		"max":3,
-		"pos":[150,200],
+		"pos":[135,200],
 		"hint":[
 		{"level":"0-3", "text":"Basic python flask"},
 		{"level":"1-3", "text":"Lv2. Render MVC pages and basic handle with cookies and sessions"},
@@ -17,7 +17,7 @@
 	"redis":{
 		"name":"Redis",
 		"max":2,
-		"pos":[50,200],
+		"pos":[35,200],
 		"abbr": "Redis",
 		"hint":[
 			{"level":"0-2", "text":"Basic Redis"},
@@ -27,7 +27,7 @@
 	"nginx":{
 		"name":"nginx",
 		"max":2,
-		"pos":[50,300],
+		"pos":[35,300],
 		"abbr": "nginx",
 		"hint":[
 			{"level":"0-3", "text":"Basic web server and reverse proxy server"},
@@ -37,7 +37,7 @@
 	"docker":{
 		"name":"Docker",
 		"max":3,
-		"pos":[50,400],
+		"pos":[35,400],
 		"abbr": "Docker",
 		"hint":[
 			{"level":"0-4", "text":"Basic docker operation (build, run, exec ...etc)"},
@@ -48,7 +48,7 @@
 	"kubernetes":{
 		"name":"Kubernetes",
 		"max":1,
-		"pos":[150,400],
+		"pos":[135,400],
 		"abbr": "K8S",
 		"hint":[
 			{"text":"Basic kubernetes"}
@@ -62,7 +62,7 @@
 	"jenkins":{
 		"name":"Jenkins",
 		"max":1,
-		"pos":[50,100],
+		"pos":[35,100],
 		"abbr": "Jenkins",
 		"hint":[
 			{"text":"Manage work flow of software developement"}
@@ -71,7 +71,7 @@
 	"test_automation":{
 		"name":"Test automation",
 		"max":2,
-		"pos":[150,100],
+		"pos":[135,100],
 		"abbr":"TDD",
 		"hint":[
 			{"level":"0-2","text":"Basic test cases management and test automation"}
@@ -80,7 +80,7 @@
 	"ci_cd":{
 		"name":"CI/CD",
 		"max":3,
-		"pos":[250,100],
+		"pos":[235,100],
 		"abbr":"CI/CD",
 		"hint":[
 			{"level":"0-3","text":"Manage work flow of software developement"},
@@ -91,7 +91,7 @@
 	"pi":{
 		"name":"Raspberry Pi",
 		"max":1,
-		"pos":[50,500],
+		"pos":[35,500],
 		"abbr": "Pi",
 		"hint":[
 			{"text":"Basic Raspberry Pi environment setup"}
@@ -100,7 +100,7 @@
 	"beacon":{
 		"name":"Beacon",
 		"max":2,
-		"pos":[150,500],
+		"pos":[135,500],
 		"abbr": "Beacon",
 		"hint":[
 			{"level":"0-2","text":"Bluetooth BLE interface setup and beacon setting"},
@@ -111,5 +111,52 @@
 				"pi":1
 			}
 		}
+	},
+	"javascript":{
+		"name":"Javascript",
+		"max":3,
+		"pos":[35,600],
+		"abbr": "JS",
+		"hint":[
+			{"text":"Building environment setup using webpack"},
+			{"text":"Understand asynchronous mechanism and familiar with promise and redux"},
+			{"text":"Other..."}
+		]
+	},
+	"nodejs": {
+		"name":"nodejs",
+		"max":2,
+		"pos":[135,600],
+		"abbr": "Node",
+		"hint": []
+	},
+	"reactjs": {
+		"name":"reactjs",
+		"max":2,
+		"pos":[235,600],
+		"abbr": "React",
+		"hint": []
+	},
+	"CSS":{
+		"name":"CSS",
+		"max":3,
+		"pos":[35,700],
+		"abbr": "CSS",
+		"hint":[
+		]
+	},
+	"emmet": {
+		"name":"emmet",
+		"max":2,
+		"pos":[135,700],
+		"abbr": "Node",
+		"hint": []
+	},
+	"sass": {
+		"name":"SASS/SCSS",
+		"max":2,
+		"pos":[235,700],
+		"abbr": "SASS",
+		"hint": []
 	}
 }
