@@ -20,12 +20,17 @@
       integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
       crossorigin="anonymous"
     />
+  <script src="./bower_components/TouchEmulator/touch-emulator.js"></script>
   <script src="./dist/swipe-refresh.js"></script>
   <script>
+    var refresh_count = 1;
     function doRefresh() {
-      console.log("Refresh!!");
+      // console.log("Refresh!!");
+      document.getElementById("output").textContent = `Refresh count: ${refresh_count}`;
+      refresh_count += 1;
     }
     function init() {
+      TouchEmulator();
       document.querySelector("swipe-refresh").refresh = doRefresh;
     }
   </script>
@@ -33,7 +38,7 @@
     html {
       font-size: 16px;
     }
-    
+
     body {
       overflow: hidden;
     }
@@ -63,6 +68,11 @@
         <p style="color: blue; font-weight: bold;">Using the mobile device to test touch event.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et id voluptatem dolore similique amet cumque ea cupiditate, eligendi totam minus aperiam consectetur doloremque optio repellendus, numquam assumenda dolores aspernatur. Impedit?</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et id voluptatem dolore similique amet cumque ea cupiditate, eligendi totam minus aperiam consectetur doloremque optio repellendus, numquam assumenda dolores aspernatur. Impedit?</p>
+        <br><br>
+        <fieldset>
+          <legend>Refresh result:</legend>
+          <span id="output"></span>
+        </fieldset>
       </div>
     </div>
     <footer style="width: 100vw; margin-top: 50px;">
