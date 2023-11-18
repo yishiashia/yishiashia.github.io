@@ -1,3 +1,14 @@
 article.first-entry {
   min-height: auto;
 }
+
+.post-content hr {
+  --hr-dots-number: 3;
+  display: block;
+  border: 0px;
+  width: 100px;
+  height: 8px;
+  margin: 30px auto;
+  background: radial-gradient(circle closest-side, gray 98%, #0000) 0 /
+    calc(100% / var(--hr-dots-number)) 100%;
+}
