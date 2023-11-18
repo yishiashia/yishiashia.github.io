@@ -1,3 +1,7 @@
+:root {
+  --main-width: min(100%, 1000px);
+}
+
 article.first-entry {
   min-height: auto;
 }
