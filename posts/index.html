@@ -131,23 +131,11 @@
     </nav>
 </header>
 <main class="main"> 
-<header class="page-header">
+<header class="page-header"><div class="breadcrumbs"><a href="https://yishiashia.github.io/">Home</a></div>
   <h1>
     Posts
   </h1>
 </header>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>嗨！你好 👋
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>我是yishiashia，這邊會分享我在工作上的所遇到的問題與學習心得，請多多指教！</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-11-15 16:06:55 +0800 CST'>November 15, 2023</span></footer>
-  <a class="entry-link" aria-label="post link to 嗨！你好 👋" href="https://yishiashia.github.io/posts/hello-world/"></a>
-</article>
 
 <article class="post-entry"> 
   <header class="entry-header">
@@ -164,7 +152,7 @@ Photo by regularguy.eth on Unsplash
 挑戰回應 的方法具體來說，是指由正在溝通的兩方其中之一發起一個 挑戰 (Challenge)，而另一方提供一個正確可被驗證的合法答案 (Response)。
 最常見的使用情境就是使用密碼驗證，比方說在電商網站購物前送出訂單之前請買家在網頁上再輸入一次密碼，如果密碼正確 (Valid response) ，則可以確認是由本人進行的操作。...</p>
   </div>
-  <footer class="entry-footer"><span title='2022-11-15 16:22:57 +0800 CST'>November 15, 2022</span></footer>
+  <footer class="entry-footer"><span title='2022-11-15 16:22:57 +0800 CST'>November 15, 2022</span>&nbsp;·&nbsp;1 min</footer>
   <a class="entry-link" aria-label="post link to 使用 WebAuthn 實作無密碼驗證與 Passkeys 介紹" href="https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/"></a>
 </article>
 
@@ -188,7 +176,7 @@ Photo by Towfiqu barbhuiya on Unsplash
 而上面我們提到非對稱式加密演算法的加解密特性與公私鑰的保管性質，就可以進行 數位簽章(確保是本人) 與 訊息保密 的動作。
 數位簽章： 透過私鑰對訊息進行加密後傳送，所有人都可以透過在PKI取得訊息傳遞者的公鑰，如果解密可以成功就代表是本人傳送的(因為私鑰只有本人有)。 訊息保密： 如果我們今天要傳遞訊息給特定的使用者A君，然後希望其他人都無法知道訊息的內容，則可以透過 PKI 取得 A君的公鑰，對訊息加密後進行傳輸，儘管訊息傳遞過程中間的人(比方説郵差)有經手這則訊息，但因為對應的私鑰只有A君本人有，所以郵差先生就無法解密而得知訊息的內容。 </p>
   </div>
-  <footer class="entry-footer"><span title='2022-11-07 16:12:47 +0800 CST'>November 7, 2022</span></footer>
+  <footer class="entry-footer"><span title='2022-11-07 16:12:47 +0800 CST'>November 7, 2022</span>&nbsp;·&nbsp;1 min</footer>
   <a class="entry-link" aria-label="post link to 簡易密碼學介紹" href="https://yishiashia.github.io/posts/introduction-to-basic-cryptography/"></a>
 </article>
 
@@ -207,7 +195,7 @@ Service Worker 無法直接存取 DOM 物件，他負責監聽和處理像是 fe
 離線儲存 常見的 Ｗeb 儲存方案有下面幾種:
 Cookie LocalStorage Cache (precache) indexedDB 一般 SPA (Single Page Application) 中比較常用的是 Cookie 跟 LocalStorage 兩種儲存方法，不過在使用上都會有大小的限制（無法儲存較大的網站資源），像是 LocalStorage 的限制依照瀏覽器不同會落在大約 2MB ~ 10MB 左右，超過後就會發出Error。...</p>
   </div>
-  <footer class="entry-footer"><span title='2022-10-07 15:51:22 +0800 CST'>October 7, 2022</span></footer>
+  <footer class="entry-footer"><span title='2022-10-07 15:51:22 +0800 CST'>October 7, 2022</span>&nbsp;·&nbsp;2 min</footer>
   <a class="entry-link" aria-label="post link to 使用 indexedDB 離線儲存圖片" href="https://yishiashia.github.io/posts/offline-image-storage-using-indexeddb/"></a>
 </article>
 
@@ -224,7 +212,7 @@ Photo by Markus Winkler on Unsplash
 CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且相當輕量不會佔用太多系統的資源，同時在設定上非常簡單，透過使用 corefile ，可以很簡單的引入各種 plugin，很大程度地減少設定上的複雜度，接下來就實際進入安裝與使用的介紹。
 安裝 CoreDNS 官網上提供了三種安裝方式， Binaries 、 Source 及 Docker。...</p>
   </div>
-  <footer class="entry-footer"><span title='2022-08-15 15:25:41 +0800 CST'>August 15, 2022</span></footer>
+  <footer class="entry-footer"><span title='2022-08-15 15:25:41 +0800 CST'>August 15, 2022</span>&nbsp;·&nbsp;3 min</footer>
   <a class="entry-link" aria-label="post link to 使用 CoreDNS 自建 DNS Server" href="https://yishiashia.github.io/posts/self-hosted-dns-with-coredns/"></a>
 </article>
 
@@ -242,7 +230,7 @@ CSS Variables (或 CSS Custom Properties)是 CSS3 的新功能，讓您可以不
 上面是一個簡單的範例，透過一個 –primary-color 的變數指定主題色彩，並套用到網頁中不同元的的樣式之中，未來要修改主題色時，只需要更新該變數，就可以一次性切換頁面中元件(如範例中的 與 標籤)的主題色，而不用一項一項的修改 CSS 樣式。
 Theme 主題切換 從前面的說明中可以得知，宣告 Theme 相關的 CSS Variables 時通常會將變數的定義寫在 :root 的區塊中讓全域的 element 元件都可以取用，這意思就是說 CSS 變數需要定義在 document....</p>
   </div>
-  <footer class="entry-footer"><span title='2022-08-10 14:36:11 +0800 CST'>August 10, 2022</span></footer>
+  <footer class="entry-footer"><span title='2022-08-10 14:36:11 +0800 CST'>August 10, 2022</span>&nbsp;·&nbsp;2 min</footer>
   <a class="entry-link" aria-label="post link to 使用 CSS Variables 切換前端主題(Theme)" href="https://yishiashia.github.io/posts/switch-themes-with-css-variable/"></a>
 </article>
     </main>

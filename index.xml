@@ -7,16 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-TW</language>
     <copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright>
-    <lastBuildDate>Wed, 15 Nov 2023 16:06:55 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>嗨！你好 👋</title>
-      <link>https://yishiashia.github.io/posts/hello-world/</link>
-      <pubDate>Wed, 15 Nov 2023 16:06:55 +0800</pubDate>
-      
-      <guid>https://yishiashia.github.io/posts/hello-world/</guid>
-      <description>我是yishiashia，這邊會分享我在工作上的所遇到的問題與學習心得，請多多指教！</description>
-    </item>
-    
+    <lastBuildDate>Tue, 15 Nov 2022 16:22:57 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用 WebAuthn 實作無密碼驗證與 Passkeys 介紹</title>
       <link>https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/</link>
