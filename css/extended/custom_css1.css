@@ -6,6 +6,10 @@ article.first-entry {
   min-height: auto;
 }
 
+img {
+  background-color: #fffaf0;
+}
+
 .post-content hr {
   --hr-dots-number: 3;
   display: block;
