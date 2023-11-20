@@ -139,21 +139,21 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2>使用 WebAuthn 實作無密碼驗證與 Passkeys 介紹
+    <h2>使用 WebAuthn 實作無密碼驗證與 Passkey 介紹
     </h2>
   </header>
   <div class="entry-content">
     <p>Google、Apple、微軟及數百間科技公司或服務商在今年 (2022) 不約而同的表態支持 FIDO 聯盟與 W3C 所主推的通用無密碼登入標準 (common passwordless sign-in standard)，希望能透過例如指紋、Face ID等認證手段替代原本的密碼登入機制，提供用戶在網頁登入時一個更安全、防網路釣魚、即時交易驗證的登入方式。
-Google 在今年10月上旬宣布在 Android 及 Chrome 導入 Passkeys 無密碼認證機制，而 Apple 也將在 iOS 16 和 macOS Ventura 引入 Passkeys ，透過掃描 QR Code 加上藍芽或其他裝置通訊技術，讓你可以透過手機的 Touch ID 或 Face ID 就可以登入你所有的電腦、平板等裝置。
-下面我們會先說明需要使用密碼跟無密碼認證使用的場景，再深入介紹實務上使用 FIDO2 進行註冊與認證 (含範例程式)，最後再總結 FIDO2 / WebAuthn 與 Passkeys 的關係 。
+Google 在今年10月上旬宣布在 Android 及 Chrome 導入 Passkey 無密碼認證機制，而 Apple 也將在 iOS 16 和 macOS Ventura 引入 Passkey ，透過掃描 QR Code 加上藍芽或其他裝置通訊技術，讓你可以透過手機的 Touch ID 或 Face ID 就可以登入你所有的電腦、平板等裝置。
+下面我們會先說明需要使用密碼跟無密碼認證使用的場景，再深入介紹實務上使用 FIDO2 進行註冊與認證 (含範例程式)，最後再總結 FIDO2 / WebAuthn 與 Passkey 的關係 。
 Photo by regularguy.eth on Unsplash
 通常需要用到 ”密碼” 或 ”認證” 的場合，像是在電商網站買東西、下訂單最後要結帳的時候會請你輸入帳號、密碼做登入(不登入的話也可能會要求你透過手機簡訊驗證碼做實名制驗證)，可以用以確保您在真實世界的身分。
 在資訊安全的領域中，不管是帳號密碼或是手機簡訊驗證碼的驗證，都是屬於 挑戰回應(Challenge/Response) 的方法。
 挑戰回應 的方法具體來說，是指由正在溝通的兩方其中之一發起一個 挑戰 (Challenge)，而另一方提供一個正確可被驗證的合法答案 (Response)。
 最常見的使用情境就是使用密碼驗證，比方說在電商網站購物前送出訂單之前請買家在網頁上再輸入一次密碼，如果密碼正確 (Valid response) ，則可以確認是由本人進行的操作。...</p>
   </div>
-  <footer class="entry-footer"><span title='2022-11-15 16:22:57 +0800 CST'>November 15, 2022</span>&nbsp;·&nbsp;1 min</footer>
-  <a class="entry-link" aria-label="post link to 使用 WebAuthn 實作無密碼驗證與 Passkeys 介紹" href="https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/"></a>
+  <footer class="entry-footer"><span title='2022-11-15 16:22:57 +0800 CST'>November 15, 2022</span>&nbsp;·&nbsp;4 min</footer>
+  <a class="entry-link" aria-label="post link to 使用 WebAuthn 實作無密碼驗證與 Passkey 介紹" href="https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/"></a>
 </article>
 
 <article class="post-entry"> 
@@ -226,9 +226,8 @@ CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且�
 前端專案時常需要進行主題(Theme)切換，比方說現在最常見的 light/dark mode 主題切換。
 本文將介紹如何透過 CSS Variables (或 CSS Custom Properties) 及 HTML root element 上的屬性控制前端網頁的主題切換。
 CSS Variables (或 CSS Custom Properties)是 CSS3 的新功能，讓您可以不用透過SASS、SCSS等預處理語言即可在原生 CSS 語法中使用變數，讓 CSS 語法也可以達到 Clean Code。
-:root { --primary-color: blue; } p { color: var(--primary-color); } h1 { color: var(--primary-color); } ▲範例：透過 CSS Variable 指定主題色彩的顏色
-上面是一個簡單的範例，透過一個 –primary-color 的變數指定主題色彩，並套用到網頁中不同元的的樣式之中，未來要修改主題色時，只需要更新該變數，就可以一次性切換頁面中元件(如範例中的 與 標籤)的主題色，而不用一項一項的修改 CSS 樣式。
-Theme 主題切換 從前面的說明中可以得知，宣告 Theme 相關的 CSS Variables 時通常會將變數的定義寫在 :root 的區塊中讓全域的 element 元件都可以取用，這意思就是說 CSS 變數需要定義在 document....</p>
+1 2 3 4 5 6 7 8 9 10 11 :root { --primary-color: blue; } p { color: var(--primary-color); } h1 { color: var(--primary-color); } ▲範例：透過 CSS Variable 指定主題色彩的顏色
+上面是一個簡單的範例，透過一個 –primary-color 的變數指定主題色彩，並套用到網頁中不同元的的樣式之中，未來要修改主題色時，只需要更新該變數，就可以一次性切換頁面中元件(如範例中的 與 標籤)的主題色，而不用一項一項的修改 CSS 樣式。...</p>
   </div>
   <footer class="entry-footer"><span title='2022-08-10 14:36:11 +0800 CST'>August 10, 2022</span>&nbsp;·&nbsp;2 min</footer>
   <a class="entry-link" aria-label="post link to 使用 CSS Variables 切換前端主題(Theme)" href="https://yishiashia.github.io/posts/switch-themes-with-css-variable/"></a>

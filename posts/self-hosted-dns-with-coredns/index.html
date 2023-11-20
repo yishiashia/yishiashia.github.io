@@ -113,8 +113,8 @@ CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且�
   "keywords": [
     
   ],
-  "articleBody": "這陣子在研究自行建設 Postfix Mail Server，發現要架設一個 Mail Server 沒有想像中的容易，除了需要透過 DNS 記錄設定網域的 A 記錄、 MX 記錄之外，另外需要 DNS 設定 SPF, DKIM, DMARC 等安全性設定。\n在設定的過程中很快的遇到了瓶頸，一般的網域服務諸如 HiDomain、GoDaddy 等平台都有代管 DNS 記錄的上限，像我使用的 HiDomain 就有最多設定 20 筆記錄的上限，因為在不同專案已經註冊了許多子網域，這次要架設一個 Mail Server 時我很快就碰到了 DNS 記錄的代管上限，後來決定使用在 Kubernetes (k8s) 中經常使用的輕量 DNS Server CoreDNS 來自建 DNS Server。\nPhoto by Markus Winkler on Unsplash\n關於 CoreDNS CoreDNS 是雲原生運算基金會 (Cloud Native Computing Foundation, 簡稱 CNCF)的一項專案，並於 2019 年畢業。\nCoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且相當輕量不會佔用太多系統的資源，同時在設定上非常簡單，透過使用 corefile ，可以很簡單的引入各種 plugin，很大程度地減少設定上的複雜度，接下來就實際進入安裝與使用的介紹。\n安裝 CoreDNS 官網上提供了三種安裝方式， Binaries 、 Source 及 Docker。\nBinaries 是已經預先編譯好的可執行檔，可以透過官方的連結去下載使用。\nSource 則是下載最新版本的 CoreDNS 原始碼自行編譯成可執行檔。\n最後一種安裝方式是透過官方在 DockerＨub 上所提供的 Docker image 去安裝與建置 CoreDNS，也是我選擇的安裝方式。\ndocker pull coredns/coredns ▲使用上面指令可以下載最新版本的 docker image\n實務上為了後續維運上的方便，我通常在使用 docker image 時會指定特定版本號，避免後續因為意料外的版本更新造成服務異常。\ndocker pull coredns/coredns:1.9.3 ▲加上版本號標籤指定使用特定版本的 docker image\n下載完 Docker image 後，可以嘗試啟動 Docker container:\ndocker run --it --rm -p 53:53/udp coredns/coredns:1.9.3 啟動後，我們可以使用下列指令測試服務是否正常\ndig @127.0.0.1 a whoami.example.org 如果可以看到如下的回覆代表 DNS Server 已成功安裝：\n; \u003c\u003c\u003e\u003e DiG 9.10.3-P4-Ubuntu \u003c\u003c\u003e\u003e @127.0.0.1 a whoami.example.org ; (1 server found) ;; global options: +cmd ;; Got answer: ;; -\u003e\u003eHEADER\u003c\u003c- opcode: QUERY, status: NXDOMAIN, id: 56921 ;; flags: qr rd ra ad; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1 ;; OPT PSEUDOSECTION: ; EDNS: version: 0, flags:; udp: 4096 ;; QUESTION SECTION: ;whoami.example.org. IN A ;; AUTHORITY SECTION: example.org. 2340 IN SOA ns.icann.org. noc.dns.icann.org. 2022072112 7200 3600 1209600 3600 ;; Query time: 5 msec ;; SERVER: 127.0.0.1#53(127.0.0.1) ;; WHEN: Mon Aug 15 11:39:36 CST 2022 ;; MSG SIZE rcvd: 123 使用 Corefile 設定 DNS 紀錄 回到最原本的需求，我是要建立一個 DNS Server 來管理自己網域的相關 DNS 紀錄，那接下來我就示範如何透過 Corefile 來設定自己網域的相關 DNS 紀錄。\nCoreDNS 有許多外掛模組可以用，那我這邊用到的是 file 這個 plugin，讓 CoreDNS 可以讀取我們設定好的 zone file。\nCorefile:\n.:53 { forward . 8.8.8.8 9.9.9.9 log errors } example.org:53 { file /cfg/example.org log errors } CoreDNS 使用 greedy match policy 來選擇最為匹配的 DNS 設定，上方的 Corefile 中我們可以看到兩個區塊，一個是 .:53，表示 wildcard 的域名 query，下面的是 example.org:53 ，表示跟 example.org 相關的域名請求會跑到這個區塊。\n以下說明相關設定：\nfile /cfg/example.org 這行指令是說透過 file 這個外掛模組去讀取 /cfg/example.org 這個 zone file 設定檔。 log 是指儲存 DNS query log。 errors 是指儲存 error log。 完成 Corefile 設定後，我們就可以開始著手來管理自己域名的 DNS 紀錄啦，可以在設定檔目錄裡面新增一個 example.org (實際設定可依照您自己註冊的域名去做替換)\nexample.org:\nexample.org. IN SOA dns.example.org. admin.example.org. 2022081321 7200 3600 1209600 3600 example.org. IN A 10.0.0.1 dns.example.org. IN A 10.0.0.1 mail.example.org. IN A 10.0.0.1 example.org. IN MX 10 mail.example.org 設定檔案目錄結構:\n/home//coredns ├── Corefile └── example.org 在完成設定檔後，重新啟動 CoreDNS Docker container:\ndocker run -itd --rm --name=dns1 \\ -v /home//coredns:/cfg \\ -p 53:53/udp \\ -p 53:53/tcp \\ coredns/coredns:1.9.3 -conf /cfg/Corefile 然後使用 dig 指令測試您的 DNS Server\ndig @127.0.0.1 A mail.example.org 壓力測試 安裝完 DNS Server 之後，使用 dnsperf 這項工具來壓力測試一下，在我所租用的 1 cpu、2G ram 的小型主機上可以得到大約 6,000 qps 的處理效能，看起來挺棒的:\n測試命令:\n$ dnsperf -s 127.0.0.1 -d queryfile -l 30 -c 20 -Q 10000 結果:\nDNS Performance Testing Tool Version 2.9.0 [Status] Command line: dnsperf -s 127.0.0.1 -d queryfile -l 30 -c 20 -Q 10000 [Status] Sending queries (to 127.0.0.1:53) [Status] Started at: Mon Aug 15 12:46:47 2022 [Status] Stopping after 30.000000 seconds [Status] Testing complete (time limit) Statistics: Queries sent: 187027 Queries completed: 187027 (100.00%) Queries lost: 0 (0.00%) Response codes: NOERROR 187027 (100.00%) Average packet size: request 38, response 74 Run time (s): 30.018232 Queries per second: 6230.446883 Average Latency (s): 0.015878 (min 0.000180, max 0.217620) Latency StdDev (s): 0.010163 域名代管平台設定 在完成並測試自建 DNS Sever 後，我們就可以將域名代管平台的 DNS 主機設定為我們自建的 DNS Server，以 HiDomain 為例，登入後我們可以點選 “我的網域” 進入網域資訊頁面，然後點選 “更新DNS主機”，將我們自建的 DNS Server 的 IPv4 及 IPv6 位址 (如果有的話) 輸入頁面後按下儲存即可。\n以上就完成了一個簡單的 DNS Sever !\n",
-  "wordCount" : "511",
+  "articleBody": "這陣子在研究自行建設 Postfix Mail Server，發現要架設一個 Mail Server 沒有想像中的容易，除了需要透過 DNS 記錄設定網域的 A 記錄、 MX 記錄之外，另外需要 DNS 設定 SPF, DKIM, DMARC 等安全性設定。\n在設定的過程中很快的遇到了瓶頸，一般的網域服務諸如 HiDomain、GoDaddy 等平台都有代管 DNS 記錄的上限，像我使用的 HiDomain 就有最多設定 20 筆記錄的上限，因為在不同專案已經註冊了許多子網域，這次要架設一個 Mail Server 時我很快就碰到了 DNS 記錄的代管上限，後來決定使用在 Kubernetes (k8s) 中經常使用的輕量 DNS Server CoreDNS 來自建 DNS Server。\nPhoto by Markus Winkler on Unsplash\n關於 CoreDNS CoreDNS 是雲原生運算基金會 (Cloud Native Computing Foundation, 簡稱 CNCF)的一項專案，並於 2019 年畢業。\nCoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且相當輕量不會佔用太多系統的資源，同時在設定上非常簡單，透過使用 corefile ，可以很簡單的引入各種 plugin，很大程度地減少設定上的複雜度，接下來就實際進入安裝與使用的介紹。\n安裝 CoreDNS 官網上提供了三種安裝方式， Binaries 、 Source 及 Docker。\nBinaries 是已經預先編譯好的可執行檔，可以透過官方的連結去下載使用。\nSource 則是下載最新版本的 CoreDNS 原始碼自行編譯成可執行檔。\n最後一種安裝方式是透過官方在 DockerＨub 上所提供的 Docker image 去安裝與建置 CoreDNS，也是我選擇的安裝方式。\n1 docker pull coredns/coredns ▲使用上面指令可以下載最新版本的 docker image\n實務上為了後續維運上的方便，我通常在使用 docker image 時會指定特定版本號，避免後續因為意料外的版本更新造成服務異常。\n1 docker pull coredns/coredns:1.9.3 ▲加上版本號標籤指定使用特定版本的 docker image\n下載完 Docker image 後，可以嘗試啟動 Docker container:\n1 docker run --it --rm -p 53:53/udp coredns/coredns:1.9.3 啟動後，我們可以使用下列指令測試服務是否正常\n1 dig @127.0.0.1 a whoami.example.org 如果可以看到如下的回覆代表 DNS Server 已成功安裝：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 ; \u003c\u003c\u003e\u003e DiG 9.10.3-P4-Ubuntu \u003c\u003c\u003e\u003e @127.0.0.1 a whoami.example.org ; (1 server found) ;; global options: +cmd ;; Got answer: ;; -\u003e\u003eHEADER\u003c\u003c- opcode: QUERY, status: NXDOMAIN, id: 56921 ;; flags: qr rd ra ad; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1 ;; OPT PSEUDOSECTION: ; EDNS: version: 0, flags:; udp: 4096 ;; QUESTION SECTION: ;whoami.example.org. IN A ;; AUTHORITY SECTION: example.org. 2340 IN SOA ns.icann.org. noc.dns.icann.org. 2022072112 7200 3600 1209600 3600 ;; Query time: 5 msec ;; SERVER: 127.0.0.1#53(127.0.0.1) ;; WHEN: Mon Aug 15 11:39:36 CST 2022 ;; MSG SIZE rcvd: 123 使用 Corefile 設定 DNS 紀錄 回到最原本的需求，我是要建立一個 DNS Server 來管理自己網域的相關 DNS 紀錄，那接下來我就示範如何透過 Corefile 來設定自己網域的相關 DNS 紀錄。\nCoreDNS 有許多外掛模組可以用，那我這邊用到的是 file 這個 plugin，讓 CoreDNS 可以讀取我們設定好的 zone file。\nCorefile:\n1 2 3 4 5 6 7 8 9 10 .:53 { forward . 8.8.8.8 9.9.9.9 log errors } example.org:53 { file /cfg/example.org log errors } CoreDNS 使用 greedy match policy 來選擇最為匹配的 DNS 設定，上方的 Corefile 中我們可以看到兩個區塊，一個是 .:53，表示 wildcard 的域名 query，下面的是 example.org:53 ，表示跟 example.org 相關的域名請求會跑到這個區塊。\n以下說明相關設定：\nfile /cfg/example.org 這行指令是說透過 file 這個外掛模組去讀取 /cfg/example.org 這個 zone file 設定檔。 log 是指儲存 DNS query log。 errors 是指儲存 error log。 完成 Corefile 設定後，我們就可以開始著手來管理自己域名的 DNS 紀錄啦，可以在設定檔目錄裡面新增一個 example.org (實際設定可依照您自己註冊的域名去做替換)\nexample.org:\n1 2 3 4 5 example.org. IN SOA dns.example.org. admin.example.org. 2022081321 7200 3600 1209600 3600 example.org. IN A 10.0.0.1 dns.example.org. IN A 10.0.0.1 mail.example.org. IN A 10.0.0.1 example.org. IN MX 10 mail.example.org 設定檔案目錄結構:\n1 2 3 /home//coredns ├── Corefile └── example.org 在完成設定檔後，重新啟動 CoreDNS Docker container:\n1 2 3 4 5 docker run -itd --rm --name=dns1 \\ -v /home//coredns:/cfg \\ -p 53:53/udp \\ -p 53:53/tcp \\ coredns/coredns:1.9.3 -conf /cfg/Corefile 然後使用 dig 指令測試您的 DNS Server\n1 dig @127.0.0.1 A mail.example.org 壓力測試 安裝完 DNS Server 之後，使用 dnsperf 這項工具來壓力測試一下，在我所租用的 1 cpu、2G ram 的小型主機上可以得到大約 6,000 qps 的處理效能，看起來挺棒的:\n測試命令:\n1 $ dnsperf -s 127.0.0.1 -d queryfile -l 30 -c 20 -Q 10000 結果:\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 DNS Performance Testing Tool Version 2.9.0 [Status] Command line: dnsperf -s 127.0.0.1 -d queryfile -l 30 -c 20 -Q 10000 [Status] Sending queries (to 127.0.0.1:53) [Status] Started at: Mon Aug 15 12:46:47 2022 [Status] Stopping after 30.000000 seconds [Status] Testing complete (time limit) Statistics: Queries sent: 187027 Queries completed: 187027 (100.00%) Queries lost: 0 (0.00%) Response codes: NOERROR 187027 (100.00%) Average packet size: request 38, response 74 Run time (s): 30.018232 Queries per second: 6230.446883 Average Latency (s): 0.015878 (min 0.000180, max 0.217620) Latency StdDev (s): 0.010163 域名代管平台設定 在完成並測試自建 DNS Sever 後，我們就可以將域名代管平台的 DNS 主機設定為我們自建的 DNS Server，以 HiDomain 為例，登入後我們可以點選 “我的網域” 進入網域資訊頁面，然後點選 “更新DNS主機”，將我們自建的 DNS Server 的 IPv4 及 IPv6 位址 (如果有的話) 輸入頁面後按下儲存即可。\n以上就完成了一個簡單的 DNS Sever !\n",
+  "wordCount" : "573",
   "inLanguage": "en",
   "datePublished": "2022-08-15T15:25:41+08:00",
   "dateModified": "2022-08-15T15:25:41+08:00",
@@ -232,17 +232,65 @@ CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且�
 <p><code>Binaries</code> 是已經預先編譯好的可執行檔，可以透過官方的連結去下載使用。</p>
 <p><code>Source</code> 則是下載最新版本的 CoreDNS 原始碼自行編譯成可執行檔。</p>
 <p>最後一種安裝方式是透過官方在 <code>DockerＨub</code> 上所提供的 Docker image 去安裝與建置 CoreDNS，也是我選擇的安裝方式。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker pull coredns/coredns
-</span></span></code></pre></div><p><em>▲使用上面指令可以下載最新版本的 docker image</em></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker pull coredns/coredns
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><em>▲使用上面指令可以下載最新版本的 docker image</em></p>
 <p>實務上為了後續維運上的方便，我通常在使用 docker image 時會指定特定版本號，避免後續因為意料外的版本更新造成服務異常。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker pull coredns/coredns:1.9.3
-</span></span></code></pre></div><p><em>▲加上版本號標籤指定使用特定版本的 docker image</em></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker pull coredns/coredns:1.9.3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><em>▲加上版本號標籤指定使用特定版本的 docker image</em></p>
 <p>下載完 Docker image 後，可以嘗試啟動 Docker container:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run --it --rm -p 53:53/udp coredns/coredns:1.9.3
-</span></span></code></pre></div><p>啟動後，我們可以使用下列指令測試服務是否正常</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>dig @127.0.0.1 a whoami.example.org
-</span></span></code></pre></div><p>如果可以看到如下的回覆代表 DNS Server 已成功安裝：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>; &lt;&lt;&gt;&gt; DiG 9.10.3-P4-Ubuntu &lt;&lt;&gt;&gt; @127.0.0.1 a whoami.example.org
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run --it --rm -p 53:53/udp coredns/coredns:1.9.3
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>啟動後，我們可以使用下列指令測試服務是否正常</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>dig @127.0.0.1 a whoami.example.org
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果可以看到如下的回覆代表 DNS Server 已成功安裝：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>; &lt;&lt;&gt;&gt; DiG 9.10.3-P4-Ubuntu &lt;&lt;&gt;&gt; @127.0.0.1 a whoami.example.org
 </span></span><span style="display:flex;"><span>; (1 server found)
 </span></span><span style="display:flex;"><span>;; global options: +cmd
 </span></span><span style="display:flex;"><span>;; Got answer:
@@ -258,12 +306,28 @@ CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且�
 </span></span><span style="display:flex;"><span>;; SERVER: 127.0.0.1#53(127.0.0.1)
 </span></span><span style="display:flex;"><span>;; WHEN: Mon Aug 15 11:39:36 CST 2022
 </span></span><span style="display:flex;"><span>;; MSG SIZE  rcvd: 123
-</span></span></code></pre></div><hr>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
 <h2 id="使用-corefile-設定-dns-紀錄">使用 Corefile 設定 DNS 紀錄<a hidden class="anchor" aria-hidden="true" href="#使用-corefile-設定-dns-紀錄">#</a></h2>
 <p>回到最原本的需求，我是要建立一個 DNS Server 來管理自己網域的相關 DNS 紀錄，那接下來我就示範如何透過 Corefile 來設定自己網域的相關 DNS 紀錄。</p>
 <p>CoreDNS 有許多外掛模組可以用，那我這邊用到的是 file 這個 plugin，讓 CoreDNS 可以讀取我們設定好的 zone file。</p>
 <p>Corefile:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>.:53 {
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>.:53 {
 </span></span><span style="display:flex;"><span>     forward . 8.8.8.8 9.9.9.9
 </span></span><span style="display:flex;"><span>     log
 </span></span><span style="display:flex;"><span>     errors
@@ -273,7 +337,9 @@ CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且�
 </span></span><span style="display:flex;"><span>     log
 </span></span><span style="display:flex;"><span>     errors
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>CoreDNS 使用 greedy match policy 來選擇最為匹配的 DNS 設定，上方的 Corefile 中我們可以看到兩個區塊，一個是 <code>.:53</code>，表示 wildcard 的域名 query，下面的是 <code>example.org:53</code> ，表示跟 <code>example.org</code> 相關的域名請求會跑到這個區塊。</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>CoreDNS 使用 greedy match policy 來選擇最為匹配的 DNS 設定，上方的 Corefile 中我們可以看到兩個區塊，一個是 <code>.:53</code>，表示 wildcard 的域名 query，下面的是 <code>example.org:53</code> ，表示跟 <code>example.org</code> 相關的域名請求會跑到這個區塊。</p>
 <p>以下說明相關設定：</p>
 <ul>
 <li><code>file /cfg/example.org</code> 這行指令是說透過 <code>file</code> 這個外掛模組去讀取 <code>/cfg/example.org</code> 這個 zone file 設定檔。</li>
@@ -282,30 +348,96 @@ CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且�
 </ul>
 <p>完成 <code>Corefile</code> 設定後，我們就可以開始著手來管理自己域名的 DNS 紀錄啦，可以在設定檔目錄裡面新增一個 <code>example.org</code> (實際設定可依照您自己註冊的域名去做替換)</p>
 <p>example.org:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>example.org.         IN  SOA   dns.example.org. admin.example.org. 2022081321 7200 3600 1209600 3600
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>example.org.         IN  SOA   dns.example.org. admin.example.org. 2022081321 7200 3600 1209600 3600
 </span></span><span style="display:flex;"><span>example.org.         IN  A     10.0.0.1
 </span></span><span style="display:flex;"><span>dns.example.org.     IN  A     10.0.0.1
 </span></span><span style="display:flex;"><span>mail.example.org.    IN  A     10.0.0.1
 </span></span><span style="display:flex;"><span>example.org.         IN  MX    10 mail.example.org
-</span></span></code></pre></div><p>設定檔案目錄結構:</p>
-<pre tabindex="0"><code>/home/&lt;your_username&gt;/coredns
-  ├── Corefile
-  └── example.org
-</code></pre><p>在完成設定檔後，重新啟動 CoreDNS Docker container:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run -itd --rm --name<span style="color:#f92672">=</span>dns1 <span style="color:#ae81ff">\
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>設定檔案目錄結構:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>/home/&lt;your_username&gt;/coredns
+</span></span><span style="display:flex;"><span>  ├── Corefile
+</span></span><span style="display:flex;"><span>  └── example.org
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在完成設定檔後，重新啟動 CoreDNS Docker container:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>docker run -itd --rm --name<span style="color:#f92672">=</span>dns1 <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -v /home/&lt;your_username&gt;/coredns:/cfg <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -p 53:53/udp <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -p 53:53/tcp <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  coredns/coredns:1.9.3 -conf /cfg/Corefile
-</span></span></code></pre></div><p>然後使用 <code>dig</code> 指令測試您的 DNS Server</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>dig @127.0.0.1 A mail.example.org
-</span></span></code></pre></div><hr>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然後使用 <code>dig</code> 指令測試您的 DNS Server</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>dig @127.0.0.1 A mail.example.org
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
 <h2 id="壓力測試">壓力測試<a hidden class="anchor" aria-hidden="true" href="#壓力測試">#</a></h2>
 <p>安裝完 DNS Server 之後，使用 dnsperf 這項工具來壓力測試一下，在我所租用的 1 cpu、2G ram 的小型主機上可以得到大約 6,000 qps 的處理效能，看起來挺棒的:</p>
 <p>測試命令:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ dnsperf -s 127.0.0.1 -d queryfile -l <span style="color:#ae81ff">30</span> -c <span style="color:#ae81ff">20</span> -Q <span style="color:#ae81ff">10000</span>
-</span></span></code></pre></div><p>結果:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>DNS Performance Testing Tool
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ dnsperf -s 127.0.0.1 -d queryfile -l <span style="color:#ae81ff">30</span> -c <span style="color:#ae81ff">20</span> -Q <span style="color:#ae81ff">10000</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>結果:</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>DNS Performance Testing Tool
 </span></span><span style="display:flex;"><span>Version 2.9.0
 </span></span><span style="display:flex;"><span>[Status] Command line: dnsperf -s 127.0.0.1 -d queryfile -l 30 -c 20 -Q 10000
 </span></span><span style="display:flex;"><span>[Status] Sending queries (to 127.0.0.1:53)
@@ -322,7 +454,9 @@ CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且�
 </span></span><span style="display:flex;"><span>  Queries per second:   6230.446883
 </span></span><span style="display:flex;"><span>Average Latency (s):  0.015878 (min 0.000180, max 0.217620)
 </span></span><span style="display:flex;"><span>  Latency StdDev (s):   0.010163
-</span></span></code></pre></div><h2 id="域名代管平台設定">域名代管平台設定<a hidden class="anchor" aria-hidden="true" href="#域名代管平台設定">#</a></h2>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="域名代管平台設定">域名代管平台設定<a hidden class="anchor" aria-hidden="true" href="#域名代管平台設定">#</a></h2>
 <p>在完成並測試自建 DNS Sever 後，我們就可以將域名代管平台的 DNS 主機設定為我們自建的 DNS Server，以 HiDomain 為例，登入後我們可以點選 “我的網域” 進入網域資訊頁面，然後點選 “更新DNS主機”，將我們自建的 DNS Server 的 IPv4 及 IPv6 位址 (如果有的話) 輸入頁面後按下儲存即可。</p>
 <p>以上就完成了一個簡單的 DNS Sever !</p>
 
