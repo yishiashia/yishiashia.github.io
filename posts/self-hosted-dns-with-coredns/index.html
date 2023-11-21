@@ -61,7 +61,18 @@ CoreDNS 主要使用 Go 語言實做，所以可以安裝於不同平台並且�
         }
 
     </style>
-</noscript><meta property="og:title" content="使用 CoreDNS 自建 DNS Server" />
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7BRX4099BG"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7BRX4099BG', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="使用 CoreDNS 自建 DNS Server" />
 <meta property="og:description" content="這陣子在研究自行建設 Postfix Mail Server，發現要架設一個 Mail Server 沒有想像中的容易，除了需要透過 DNS 記錄設定網域的 A 記錄、 MX 記錄之外，另外需要 DNS 設定 SPF, DKIM, DMARC 等安全性設定。
 在設定的過程中很快的遇到了瓶頸，一般的網域服務諸如 HiDomain、GoDaddy 等平台都有代管 DNS 記錄的上限，像我使用的 HiDomain 就有最多設定 20 筆記錄的上限，因為在不同專案已經註冊了許多子網域，這次要架設一個 Mail Server 時我很快就碰到了 DNS 記錄的代管上限，後來決定使用在 Kubernetes (k8s) 中經常使用的輕量 DNS Server CoreDNS 來自建 DNS Server。
 Photo by Markus Winkler on Unsplash

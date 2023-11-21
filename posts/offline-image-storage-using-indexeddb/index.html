@@ -63,7 +63,18 @@ Cookie LocalStorage Cache (precache) indexedDB 一般 SPA (Single Page Applicati
         }
 
     </style>
-</noscript><meta property="og:title" content="使用 indexedDB 離線儲存圖片" />
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7BRX4099BG"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-7BRX4099BG', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="使用 indexedDB 離線儲存圖片" />
 <meta property="og:description" content="緣起 由於最近碰到要在負責的網頁式聊天機器人中，新增如同Line聊天室的貼圖功能，可想而知會有大量的貼圖圖片會需要在用戶裝置瀏覽器進行下載，不管是對圖片伺服器或是用戶等待的過程來說都是不小的負擔。
 為了解決這個問題，透過使用了 PWA (Progressive Web App) 技術中常用的離線儲存方案 indexedDB 來快取貼圖圖片，不僅減少用戶端與網站伺服器端的連線流量，也提升的用戶體驗(UX: User Experience) 。
 Photo by Scott Graham on Unsplash
