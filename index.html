@@ -173,6 +173,23 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2>網頁深色模式與 CSS 相關屬性
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>介紹 現代人由於工作、娛樂目的而長時間使用像是手機、電腦等 3C 產品，時間久了往往會造成眼睛疲勞不適，因此現在的網頁或 APP 介面往往會提供深色模式或是夜間模式，除了可以減少裝置電量的消耗，也可以減少光線對眼睛的刺激。
+因此在前端網頁上實作亮色、深色模式也變成了提升使用者閱讀體驗所不可缺少的設計之一，因此，以下我們將說明如何透過 CSS 原生的 color-scheme 屬性來建置同時支援亮色 / 深色模式的網頁。
+使用者代理樣式表 (User agent stylesheet) 使用者代理樣式表 (或有人翻譯作瀏覽器預設樣式表)，為瀏覽器針對原生 html 元件像是文字、輸入框或按鈕等預設的樣式。
+以下我們撰寫了一個簡單 html 頁面，其中包含了一個 &lt;h1&gt; 元件:
+1 2 3 4 5 &lt;html lang=&#34;en&#34;&gt; &lt;body&gt; &lt;h1&gt;hello&lt;/h1&gt; &lt;/body&gt; &lt;/html&gt; 在 Edge 瀏覽器中打開後，使用 devtool 觀察樣式可以看到下列的樣式，這個就是套用了瀏覽器預設的樣式表中關於 &lt;h1&gt; 元件的樣式。
+1 2 3 4 5 6 7 8 9 h1 { display: block; font-size: 2em; margin-block-start: 0.67em; margin-block-end: 0.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold; } 除了對於各個 html 元件提供預設的樣式表之外，現在的主流瀏覽器也提供各元件在深色模式下的樣式表，而我們可以透過 color-scheme 來啟用它。...</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-11-28 14:39:11 +0800 CST'>November 28, 2023</span>&nbsp;·&nbsp;1 min</footer>
+  <a class="entry-link" aria-label="post link to 網頁深色模式與 CSS 相關屬性" href="https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>使用 WebAuthn 實作無密碼驗證與 Passkey 介紹
     </h2>
   </header>
