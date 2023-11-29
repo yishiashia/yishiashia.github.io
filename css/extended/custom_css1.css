@@ -20,3 +20,18 @@ img {
   background: radial-gradient(circle closest-side, gray 98%, #0000) 0 /
     calc(100% / var(--hr-dots-number)) 100%;
 }
+
+.post-entry {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+.post-entry .entry-cover {
+  max-width: 150px;
+  margin: 0 !important;
+}
+.post-entry .entry-cover img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
