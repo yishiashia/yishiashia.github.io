@@ -149,6 +149,11 @@ if (!doNotTrack) {
 </header>
 
 <article class="post-entry"> 
+<figure class="entry-cover">
+        <img loading="lazy" srcset="https://yishiashia.github.io/posts/webcomponent-introduction-1/photo-1508921340878-ba53e1f016ec_hubf679cf552626ca82f0a99f95dda27de_323668_360x0_resize_q75_h2_box_2.webp 360w ,https://yishiashia.github.io/posts/webcomponent-introduction-1/photo-1508921340878-ba53e1f016ec_hubf679cf552626ca82f0a99f95dda27de_323668_480x0_resize_q75_h2_box_2.webp 480w ,https://yishiashia.github.io/posts/webcomponent-introduction-1/photo-1508921340878-ba53e1f016ec_hubf679cf552626ca82f0a99f95dda27de_323668_720x0_resize_q75_h2_box_2.webp 720w ,https://yishiashia.github.io/posts/webcomponent-introduction-1/photo-1508921340878-ba53e1f016ec_hubf679cf552626ca82f0a99f95dda27de_323668_1080x0_resize_q75_h2_box_2.webp 1080w ,https://yishiashia.github.io/posts/webcomponent-introduction-1/photo-1508921340878-ba53e1f016ec_hubf679cf552626ca82f0a99f95dda27de_323668_1500x0_resize_q75_h2_box_2.webp 1500w ,https://yishiashia.github.io/posts/webcomponent-introduction-1/photo-1508921340878-ba53e1f016ec.webp 2370w" 
+            sizes="(min-width: 768px) 720px, 100vw" src="https://yishiashia.github.io/posts/webcomponent-introduction-1/photo-1508921340878-ba53e1f016ec.webp" alt="" 
+            width="2370" height="1580">
+</figure>
   <header class="entry-header">
     <h2>Web Components 介紹與實作說明 (1)
     </h2>
@@ -156,9 +161,10 @@ if (!doNotTrack) {
   <div class="entry-content">
     <p>介紹 Angular Components、ReactJS Components、VueJS Components 通通都有，就是沒有屬於 VanillaJS 的 Components，所以今後只好自己創造 (大誤)。
 其實早在 2011 年， Web Components 的概念就已經被提出，除了希望可以建立重複使用的 Web UI 元件外，也帶入了封裝的概念，如透過 Shadow DOM 的引入以封裝 Custom Element 的 CSS 樣式，避免互相污染，另外透過 Custom Element 中自定義的行為來達到功能上的封裝與重用性。
-上面提到 Shadow DOM 、 Custom Elements，另外還有 HTML Template 為 Web Components 主要的三個核心內容，以下我們就分別介紹這三項：
+上面提到 Shadow DOM 、 Custom Elements，另外還有 HTML Template 為 Web Components 主要的三個核心內容，以下我們就分別介紹這三項核心內容。
+Photo by Taras Shypka on Unsplash
 Custom elements Custom elements 透過原生 JavaScript APIs 來自定義客製化 HTML 標籤，包含它的 attributes、properties與 events 等，方便依照網站設計的客製化需求來使用。
-1 2 3 4 5 6 class MyCustomElement extends HTMLElement { ... } // 定義 Custom element window....</p>
+1 2 3 4 5 6 class MyCustomElement extends HTMLElement { ....</p>
   </div>
   <footer class="entry-footer"><span title='2023-11-29 11:24:11 +0800 CST'>November 29, 2023</span>&nbsp;·&nbsp;4 min</footer>
   <a class="entry-link" aria-label="post link to Web Components 介紹與實作說明 (1)" href="https://yishiashia.github.io/posts/webcomponent-introduction-1/"></a>
