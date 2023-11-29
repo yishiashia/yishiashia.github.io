@@ -7,7 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-TW</language>
     <copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright>
-    <lastBuildDate>Tue, 28 Nov 2023 14:39:11 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 29 Nov 2023 11:24:11 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Web Components 介紹與實作說明 (1)</title>
+      <link>https://yishiashia.github.io/posts/webcomponent-introduction-1/</link>
+      <pubDate>Wed, 29 Nov 2023 11:24:11 +0800</pubDate>
+      
+      <guid>https://yishiashia.github.io/posts/webcomponent-introduction-1/</guid>
+      <description>介紹 Angular Components、ReactJS Components、VueJS Components 通通都有，就是沒有屬於 VanillaJS 的 Components，所以今後只好自己創造 (大誤)。
+其實早在 2011 年， Web Components 的概念就已經被提出，除了希望可以建立重複使用的 Web UI 元件外，也帶入了封裝的概念，如透過 Shadow DOM 的引入以封裝 Custom Element 的 CSS 樣式，避免互相污染，另外透過 Custom Element 中自定義的行為來達到功能上的封裝與重用性。
+上面提到 Shadow DOM 、 Custom Elements，另外還有 HTML Template 為 Web Components 主要的三個核心內容，以下我們就分別介紹這三項：
+Custom elements Custom elements 透過原生 JavaScript APIs 來自定義客製化 HTML 標籤，包含它的 attributes、properties與 events 等，方便依照網站設計的客製化需求來使用。
+1 2 3 4 5 6 class MyCustomElement extends HTMLElement { ... } // 定義 Custom element window.</description>
+    </item>
+    
     <item>
       <title>網頁深色模式與 CSS 相關屬性</title>
       <link>https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/</link>
