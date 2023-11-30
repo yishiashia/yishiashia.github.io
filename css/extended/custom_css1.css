@@ -28,6 +28,7 @@ img {
 }
 .post-entry .entry-cover {
   max-width: 150px;
+  min-width: 80px;
   margin: 0 !important;
 }
 .post-entry .entry-cover img {
