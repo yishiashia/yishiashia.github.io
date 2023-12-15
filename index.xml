@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-TW</language>
     <copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright>
-    <lastBuildDate>Wed, 29 Nov 2023 11:24:11 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 15 Dec 2023 10:23:22 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Web Components 介紹與實作說明 | 我的開源 UI 元件庫</title>
+      <link>https://yishiashia.github.io/posts/my-webcomponents/</link>
+      <pubDate>Fri, 15 Dec 2023 10:23:22 +0800</pubDate>
+      
+      <guid>https://yishiashia.github.io/posts/my-webcomponents/</guid>
+      <description>前言 在學會使用 WebComponent 的相關技巧後，陸陸續續也實作了不少的 UI 元件， 方便後續在進行前端專案的時候可以快速的重複使用。
+而且不管您的專案是使用 VueJS、ReactJS 或者Angular， 都可以支援原生的 WebComponent，所以等於是一個通用的軍火庫， 寫一次就可以 Use everywhere，所以非常推薦將您常用的 UI 元件寫成 WebComponent 版本。
+下面整理我目前有實作開源的 WebComponent 元件，後續如果有新做的 WebComponent 元件， 也會繼續更新上來，如果使用上有問題也歡迎發 issue 給我，謝謝 😊
+小型輕量的 WebComponents 元件庫 項次 WebComponent 元件 安裝 / 原始碼 1 WebComponent Demo | swipe-to-refresh A WebComponent to pull the window down and refresh. 2 WebComponent Demo | mic-input Speech input WebComponent implemented with Web Speech API. 3 WebComponent Demo | star-input Star rating input implemented with WebComponent.</description>
+    </item>
+    
     <item>
       <title>Web Components 介紹與實作說明 (1)</title>
       <link>https://yishiashia.github.io/posts/webcomponent-introduction-1/</link>
