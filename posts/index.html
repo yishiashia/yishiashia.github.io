@@ -150,6 +150,34 @@ if (!doNotTrack) {
 
 <article class="post-entry"> 
 <figure class="entry-cover">
+        <img loading="lazy" srcset="https://yishiashia.github.io/posts/webcomponent-introduction-2/photo-1530811761207-8d9d22f0a141_hufc2363791d5b26ee71905b9d1bcb064f_238958_360x0_resize_q75_h2_box_2.webp 360w ,https://yishiashia.github.io/posts/webcomponent-introduction-2/photo-1530811761207-8d9d22f0a141_hufc2363791d5b26ee71905b9d1bcb064f_238958_480x0_resize_q75_h2_box_2.webp 480w ,https://yishiashia.github.io/posts/webcomponent-introduction-2/photo-1530811761207-8d9d22f0a141_hufc2363791d5b26ee71905b9d1bcb064f_238958_720x0_resize_q75_h2_box_2.webp 720w ,https://yishiashia.github.io/posts/webcomponent-introduction-2/photo-1530811761207-8d9d22f0a141_hufc2363791d5b26ee71905b9d1bcb064f_238958_1080x0_resize_q75_h2_box_2.webp 1080w ,https://yishiashia.github.io/posts/webcomponent-introduction-2/photo-1530811761207-8d9d22f0a141_hufc2363791d5b26ee71905b9d1bcb064f_238958_1500x0_resize_q75_h2_box_2.webp 1500w ,https://yishiashia.github.io/posts/webcomponent-introduction-2/photo-1530811761207-8d9d22f0a141.webp 2370w" 
+            sizes="(min-width: 768px) 720px, 100vw" src="https://yishiashia.github.io/posts/webcomponent-introduction-2/photo-1530811761207-8d9d22f0a141.webp" alt="Photo by [Jason Leung](https://unsplash.com/@ninjason) on [Unsplash](https://unsplash.com/)" 
+            width="2370" height="1580">
+</figure>
+  <div>
+  <header class="entry-header">
+    <h2>Web Components 介紹與實作說明 (2) | 實作一個 Tooltip 元件
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>先前我們介紹了關於 WebComponents 以及他的三大核心內容，這裡我們要透過一個實際的案例來建立一個 Tooltip UI 元件，來進一步熟悉 WebComponent 的實作方式。
+在這篇文章中我們會先在頁面的 html 使用 template，然後定義一個 CustomElement 來簡單實作 WebComponent。
+後續在另外的章節，我們會再介紹如何將我們實作的 WebComponent 模組化並上傳到 CDN 上供直接使用。
+Tooltips 元件 Tooltips 元件是指當滑鼠移到特定網頁元件上，上方或指定方向會跳出一個泡泡提示窗並帶有提示內容文字或是 HTML 內容，可參考下圖:
+圖片來源: 維基百科
+元件設計 在實作一個 Tooltips，我們會希望:
+可以在指定元件上方出現泡泡。 泡泡內可以帶入指定文字或 HTML。 泡泡提示窗可以帶一個箭頭指向指向目標內容元件。 當泡泡提示窗在網頁邊緣顯示時，可以自動往網頁中心內縮，避免超出網頁內容區。 那要使用 WebComponent Custom Elements 來實作 Tooltips 元件，我們先假定實作的 html tag 叫做 my-tooltip，如果要在一個圖片上加上提示窗，希望語法會是:
+1 2 3 4 &lt;my-tooltip alt=&#34;這是一張圖片&#34;&gt; &lt;div n&gt;&lt;/div&gt; &lt;img src=&#34;a.jpg&#34; /&gt; &lt;/my-tooltip&gt; 而希望畫面呈現出來會像這樣:
+而如果要使用 HTML 當作提示窗的內容，則希望語法會是像這樣:
+1 2 3 4 5 6 7 8 9 &lt;my-tooltip&gt; &lt;!...</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-12-16 22:00:11 +0800 CST'>December 16, 2023</span>&nbsp;·&nbsp;3 min</footer>
+  <a class="entry-link" aria-label="post link to Web Components 介紹與實作說明 (2) | 實作一個 Tooltip 元件" href="https://yishiashia.github.io/posts/webcomponent-introduction-2/"></a>
+  </div>
+</article>
+
+<article class="post-entry"> 
+<figure class="entry-cover">
         <img loading="lazy" srcset="https://yishiashia.github.io/posts/my-webcomponents/maik-jonietz-_yMciiStJyY-unsplash_hu3d03a01dcc18bc5be0e67db3d8d209a6_4564294_360x0_resize_q75_box.jpg 360w ,https://yishiashia.github.io/posts/my-webcomponents/maik-jonietz-_yMciiStJyY-unsplash_hu3d03a01dcc18bc5be0e67db3d8d209a6_4564294_480x0_resize_q75_box.jpg 480w ,https://yishiashia.github.io/posts/my-webcomponents/maik-jonietz-_yMciiStJyY-unsplash_hu3d03a01dcc18bc5be0e67db3d8d209a6_4564294_720x0_resize_q75_box.jpg 720w ,https://yishiashia.github.io/posts/my-webcomponents/maik-jonietz-_yMciiStJyY-unsplash_hu3d03a01dcc18bc5be0e67db3d8d209a6_4564294_1080x0_resize_q75_box.jpg 1080w ,https://yishiashia.github.io/posts/my-webcomponents/maik-jonietz-_yMciiStJyY-unsplash_hu3d03a01dcc18bc5be0e67db3d8d209a6_4564294_1500x0_resize_q75_box.jpg 1500w ,https://yishiashia.github.io/posts/my-webcomponents/maik-jonietz-_yMciiStJyY-unsplash.jpg 6000w" 
             sizes="(min-width: 768px) 720px, 100vw" src="https://yishiashia.github.io/posts/my-webcomponents/maik-jonietz-_yMciiStJyY-unsplash.jpg" alt="Photo by [Maik Jonietz](https://unsplash.com/@der_maik_) on [Unsplash](https://unsplash.com/)" 
             width="6000" height="4000">

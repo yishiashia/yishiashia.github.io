@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-TW</language>
     <copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright>
-    <lastBuildDate>Fri, 15 Dec 2023 10:23:22 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 16 Dec 2023 22:00:11 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Web Components 介紹與實作說明 (2) | 實作一個 Tooltip 元件</title>
+      <link>https://yishiashia.github.io/posts/webcomponent-introduction-2/</link>
+      <pubDate>Sat, 16 Dec 2023 22:00:11 +0800</pubDate>
+      
+      <guid>https://yishiashia.github.io/posts/webcomponent-introduction-2/</guid>
+      <description>先前我們介紹了關於 WebComponents 以及他的三大核心內容，這裡我們要透過一個實際的案例來建立一個 Tooltip UI 元件，來進一步熟悉 WebComponent 的實作方式。
+在這篇文章中我們會先在頁面的 html 使用 template，然後定義一個 CustomElement 來簡單實作 WebComponent。
+後續在另外的章節，我們會再介紹如何將我們實作的 WebComponent 模組化並上傳到 CDN 上供直接使用。
+Tooltips 元件 Tooltips 元件是指當滑鼠移到特定網頁元件上，上方或指定方向會跳出一個泡泡提示窗並帶有提示內容文字或是 HTML 內容，可參考下圖:
+圖片來源: 維基百科
+元件設計 在實作一個 Tooltips，我們會希望:
+可以在指定元件上方出現泡泡。 泡泡內可以帶入指定文字或 HTML。 泡泡提示窗可以帶一個箭頭指向指向目標內容元件。 當泡泡提示窗在網頁邊緣顯示時，可以自動往網頁中心內縮，避免超出網頁內容區。 那要使用 WebComponent Custom Elements 來實作 Tooltips 元件，我們先假定實作的 html tag 叫做 my-tooltip，如果要在一個圖片上加上提示窗，希望語法會是:
+1 2 3 4 &amp;lt;my-tooltip alt=&amp;#34;這是一張圖片&amp;#34;&amp;gt; &amp;lt;div n&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;img src=&amp;#34;a.jpg&amp;#34; /&amp;gt; &amp;lt;/my-tooltip&amp;gt; 而希望畫面呈現出來會像這樣:
+而如果要使用 HTML 當作提示窗的內容，則希望語法會是像這樣:
+1 2 3 4 5 6 7 8 9 &amp;lt;my-tooltip&amp;gt; &amp;lt;!</description>
+    </item>
+    
     <item>
       <title>Web Components 介紹與實作說明 | 我的開源 UI 元件庫</title>
       <link>https://yishiashia.github.io/posts/my-webcomponents/</link>
