@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
 <title>網頁深色模式與 CSS 相關屬性 | yishiashia&#39;s Blog</title>
-<meta name="keywords" content="">
+<meta name="keywords" content="CSS, Dark mode, Front-end">
 <meta name="description" content="介紹 現代人由於工作、娛樂目的而長時間使用像是手機、電腦等 3C 產品，時間久了往往會造成眼睛疲勞不適，因此現在的網頁或 APP 介面往往會提供深色模式或是夜間模式，除了可以減少裝置電量的消耗，也可以減少光線對眼睛的刺激。
 因此在前端網頁上實作亮色、深色模式也變成了提升使用者閱讀體驗所不可缺少的設計之一，因此，以下我們將說明如何透過 CSS 原生的 color-scheme 屬性來建置同時支援亮色 / 深色模式的網頁。
 使用者代理樣式表 (User agent stylesheet) 使用者代理樣式表 (或有人翻譯作瀏覽器預設樣式表)，為瀏覽器針對原生 html 元件像是文字、輸入框或按鈕等預設的樣式。
@@ -80,11 +80,13 @@ if (!doNotTrack) {
 1 2 3 4 5 &lt;html lang=&#34;en&#34;&gt; &lt;body&gt; &lt;h1&gt;hello&lt;/h1&gt; &lt;/body&gt; &lt;/html&gt; 在 Edge 瀏覽器中打開後，使用 devtool 觀察樣式可以看到下列的樣式，這個就是套用了瀏覽器預設的樣式表中關於 &lt;h1&gt; 元件的樣式。
 1 2 3 4 5 6 7 8 9 h1 { display: block; font-size: 2em; margin-block-start: 0.67em; margin-block-end: 0.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold; } 除了對於各個 html 元件提供預設的樣式表之外，現在的主流瀏覽器也提供各元件在深色模式下的樣式表，而我們可以透過 color-scheme 來啟用它。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/" />
+<meta property="og:image" content="https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25.webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-11-28T14:39:11+08:00" />
 <meta property="article:modified_time" content="2023-11-28T14:39:11+08:00" />
 
-<meta name="twitter:card" content="summary"/>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25.webp" />
 <meta name="twitter:title" content="網頁深色模式與 CSS 相關屬性"/>
 <meta name="twitter:description" content="介紹 現代人由於工作、娛樂目的而長時間使用像是手機、電腦等 3C 產品，時間久了往往會造成眼睛疲勞不適，因此現在的網頁或 APP 介面往往會提供深色模式或是夜間模式，除了可以減少裝置電量的消耗，也可以減少光線對眼睛的刺激。
 因此在前端網頁上實作亮色、深色模式也變成了提升使用者閱讀體驗所不可缺少的設計之一，因此，以下我們將說明如何透過 CSS 原生的 color-scheme 屬性來建置同時支援亮色 / 深色模式的網頁。
@@ -122,12 +124,12 @@ if (!doNotTrack) {
   "name": "網頁深色模式與 CSS 相關屬性",
   "description": "介紹 現代人由於工作、娛樂目的而長時間使用像是手機、電腦等 3C 產品，時間久了往往會造成眼睛疲勞不適，因此現在的網頁或 APP 介面往往會提供深色模式或是夜間模式，除了可以減少裝置電量的消耗，也可以減少光線對眼睛的刺激。\n因此在前端網頁上實作亮色、深色模式也變成了提升使用者閱讀體驗所不可缺少的設計之一，因此，以下我們將說明如何透過 CSS 原生的 color-scheme 屬性來建置同時支援亮色 / 深色模式的網頁。\n使用者代理樣式表 (User agent stylesheet) 使用者代理樣式表 (或有人翻譯作瀏覽器預設樣式表)，為瀏覽器針對原生 html 元件像是文字、輸入框或按鈕等預設的樣式。\n以下我們撰寫了一個簡單 html 頁面，其中包含了一個 \u0026lt;h1\u0026gt; 元件:\n1 2 3 4 5 \u0026lt;html lang=\u0026#34;en\u0026#34;\u0026gt; \u0026lt;body\u0026gt; \u0026lt;h1\u0026gt;hello\u0026lt;/h1\u0026gt; \u0026lt;/body\u0026gt; \u0026lt;/html\u0026gt; 在 Edge 瀏覽器中打開後，使用 devtool 觀察樣式可以看到下列的樣式，這個就是套用了瀏覽器預設的樣式表中關於 \u0026lt;h1\u0026gt; 元件的樣式。\n1 2 3 4 5 6 7 8 9 h1 { display: block; font-size: 2em; margin-block-start: 0.67em; margin-block-end: 0.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold; } 除了對於各個 html 元件提供預設的樣式表之外，現在的主流瀏覽器也提供各元件在深色模式下的樣式表，而我們可以透過 color-scheme 來啟用它。",
   "keywords": [
-    
+    "CSS", "Dark mode", "Front-end"
   ],
   "articleBody": "介紹 現代人由於工作、娛樂目的而長時間使用像是手機、電腦等 3C 產品，時間久了往往會造成眼睛疲勞不適，因此現在的網頁或 APP 介面往往會提供深色模式或是夜間模式，除了可以減少裝置電量的消耗，也可以減少光線對眼睛的刺激。\n因此在前端網頁上實作亮色、深色模式也變成了提升使用者閱讀體驗所不可缺少的設計之一，因此，以下我們將說明如何透過 CSS 原生的 color-scheme 屬性來建置同時支援亮色 / 深色模式的網頁。\n使用者代理樣式表 (User agent stylesheet) 使用者代理樣式表 (或有人翻譯作瀏覽器預設樣式表)，為瀏覽器針對原生 html 元件像是文字、輸入框或按鈕等預設的樣式。\n以下我們撰寫了一個簡單 html 頁面，其中包含了一個 元件:\n1 2 3 4 5 \u003chtml lang=\"en\"\u003e \u003cbody\u003e \u003ch1\u003ehello\u003c/h1\u003e \u003c/body\u003e \u003c/html\u003e 在 Edge 瀏覽器中打開後，使用 devtool 觀察樣式可以看到下列的樣式，這個就是套用了瀏覽器預設的樣式表中關於 元件的樣式。\n1 2 3 4 5 6 7 8 9 h1 { display: block; font-size: 2em; margin-block-start: 0.67em; margin-block-end: 0.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold; } 除了對於各個 html 元件提供預設的樣式表之外，現在的主流瀏覽器也提供各元件在深色模式下的樣式表，而我們可以透過 color-scheme 來啟用它。\ncolor-scheme 屬性 color-scheme 屬性主要在告知瀏覽器當前網頁是否支援亮色與深色模式，範例如下:\n1 2 3 4 5 6 7 :root { color-scheme: normal; /* 忽略作業系統的顏色偏好，使用預設的瀏覽器樣式 */ color-scheme: dark; /* 當前網頁支援深色模式 */ color-scheme: light; /* 當前網頁支援亮色模式 */ color-scheme: light dark; /* 當前網頁同時支援亮色與深色模式 */ color-scheme: only light; /* 當前網頁僅支援亮色模式，避免瀏覽器覆寫配色方案 (如: Chrome 的自動深色模式) */ } color-scheme 屬性可以放在 :root 或 html element 的樣式上，但是由於瀏覽器支援的議題，建議可以放在 :root 上會更直覺一些。\nprefers-color-scheme 屬性 CSS 中的 prefers-color-scheme 屬性可以用來偵測當前作業系統中所設定的偏好亮色 / 深色模式，來讓整體用戶終端的體驗可以趨近一致。\n例如我們在 iPhone 手機上設定使用深色模式，在不同的 APP 或是桌面之間通常都會以暗色系的顏色主題為呈現，但用戶打開一個僅支援亮色模式的網頁時會覺得光線刺眼而體驗不佳，這時我們可以在網頁上透過 prefers-color-scheme 屬性來偵測與實作深色模式的客製化樣式，就可以提供用戶更好的視覺體驗。\n以下範例說明透過 CSS prefers-color-scheme 屬性實作同時支援亮色與深色模式的網頁樣式。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 h1 { color: black; /* 設定 h1 標籤預設的文字顏色 */ } @media (prefers-color-scheme: light) { h1 { color: blue; /* 亮色模式時 h1 標籤的文字顏色會是藍色 */ } } @media (prefers-color-scheme: dark) { h1 { color: white; /* 深色模式時 h1 標籤的文字顏色會是白色 */ } } 結語 透過 color-scheme 屬性我們可以告知瀏覽器當前的網頁是否支援深色模式，讓瀏覽器可以套用相關的使用者代理預設的樣式表，而透過 prefers-color-scheme 屬性我們可以知道當前用戶設備所偏好的預設顏色屬性，讓我們的網頁的顏色模式可以與整個用戶終端設備一致，從而提高用戶的閱讀體驗。\n",
   "wordCount" : "208",
   "inLanguage": "en",
-  "datePublished": "2023-11-28T14:39:11+08:00",
+  "image":"https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25.webp","datePublished": "2023-11-28T14:39:11+08:00",
   "dateModified": "2023-11-28T14:39:11+08:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -187,6 +189,16 @@ if (!doNotTrack) {
         </div>
         <ul id="menu">
             <li>
+                <a href="https://yishiashia.github.io/" title="yishiashia&#39;s Blog">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://yishiashia.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
                 <a href="https://yishiashia.github.io/posts/" title="Posts">
                     <span>Posts</span>
                 </a>
@@ -205,7 +217,13 @@ if (!doNotTrack) {
     <div class="post-meta"><span title='2023-11-28 14:39:11 +0800 CST'>November 28, 2023</span>&nbsp;·&nbsp;1 min
 
 </div>
-  </header> <div class="toc">
+  </header> 
+<figure class="entry-cover">
+        <img loading="lazy" srcset="https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25_hu10fc2a13aff43a8f0553057e14b4b15c_178674_360x0_resize_q75_h2_box_2.webp 360w ,https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25_hu10fc2a13aff43a8f0553057e14b4b15c_178674_480x0_resize_q75_h2_box_2.webp 480w ,https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25_hu10fc2a13aff43a8f0553057e14b4b15c_178674_720x0_resize_q75_h2_box_2.webp 720w ,https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25_hu10fc2a13aff43a8f0553057e14b4b15c_178674_1080x0_resize_q75_h2_box_2.webp 1080w ,https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25_hu10fc2a13aff43a8f0553057e14b4b15c_178674_1500x0_resize_q75_h2_box_2.webp 1500w ,https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25.webp 2370w" 
+            sizes="(min-width: 768px) 720px, 100vw" src="https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/photo-1552862750-746b8f6f7f25.webp" alt="Photo by [Johannes Plenio](https://unsplash.com/@jplenio) on [Unsplash](https://unsplash.com/)" 
+            width="2370" height="1580">
+        <p>Photo by <a href="https://unsplash.com/@jplenio">Johannes Plenio</a> on <a href="https://unsplash.com/">Unsplash</a></p>
+</figure><div class="toc">
     <details >
         <summary accesskey="c" title="(Alt + C)">
             <span class="details">Table of Contents</span>
@@ -347,11 +365,14 @@ if (!doNotTrack) {
 
   <footer class="post-footer">
     <ul class="post-tags">
+      <li><a href="https://yishiashia.github.io/tags/css/">CSS</a></li>
+      <li><a href="https://yishiashia.github.io/tags/dark-mode/">Dark mode</a></li>
+      <li><a href="https://yishiashia.github.io/tags/front-end/">Front-end</a></li>
     </ul>
 
 <div class="share-buttons">
     <a target="_blank" rel="noopener noreferrer" aria-label="share 網頁深色模式與 CSS 相關屬性 on x"
-        href="https://x.com/intent/tweet/?text=%e7%b6%b2%e9%a0%81%e6%b7%b1%e8%89%b2%e6%a8%a1%e5%bc%8f%e8%88%87%20CSS%20%e7%9b%b8%e9%97%9c%e5%b1%ac%e6%80%a7&amp;url=https%3a%2f%2fyishiashia.github.io%2fposts%2fdark-mode-and-css-color-scheme%2f&amp;hashtags=">
+        href="https://x.com/intent/tweet/?text=%e7%b6%b2%e9%a0%81%e6%b7%b1%e8%89%b2%e6%a8%a1%e5%bc%8f%e8%88%87%20CSS%20%e7%9b%b8%e9%97%9c%e5%b1%ac%e6%80%a7&amp;url=https%3a%2f%2fyishiashia.github.io%2fposts%2fdark-mode-and-css-color-scheme%2f&amp;hashtags=CSS%2cDarkmode%2cFront-end">
         <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
             <path
                 d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z"/>
