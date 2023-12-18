@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Cryptography on yishiashia's Blog</title><link>https://yishiashia.github.io/categories/cryptography/</link><description>Recent content in Cryptography on yishiashia's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-TW</language><copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright><lastBuildDate>Tue, 15 Nov 2022 16:22:57 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/categories/cryptography/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 WebAuthn 實作無密碼驗證與 Passkey 介紹</title><link>https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/</link><pubDate>Tue, 15 Nov 2022 16:22:57 +0800</pubDate><guid>https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/</guid><description>Google、Apple、微軟及數百間科技公司或服務商在今年 (2022) 不約而同的表態支持 FIDO 聯盟與 W3C 所主推的通用無密碼登入標準 (common passwordless sign-in standard)，希望能透過例如指紋、Face ID等認證手段替代原本的密碼登入機制，提供用戶在網頁登入時一個更安全、防網路釣魚、即時交易驗證的登入方式。
+Google 在今年10月上旬宣布在 Android 及 Chrome 導入 Passkey 無密碼認證機制，而 Apple 也將在 iOS 16 和 macOS Ventura 引入 Passkey ，透過掃描 QR Code 加上藍芽或其他裝置通訊技術，讓你可以透過手機的 Touch ID 或 Face ID 就可以登入你所有的電腦、平板等裝置。
+下面我們會先說明需要使用密碼跟無密碼認證使用的場景，再深入介紹實務上使用 FIDO2 進行註冊與認證 (含範例程式)，最後再總結 FIDO2 / WebAuthn 與 Passkey 的關係 。
+通常需要用到 ”密碼” 或 ”認證” 的場合，像是在電商網站買東西、下訂單最後要結帳的時候會請你輸入帳號、密碼做登入(不登入的話也可能會要求你透過手機簡訊驗證碼做實名制驗證)，可以用以確保您在真實世界的身分。
+在資訊安全的領域中，不管是帳號密碼或是手機簡訊驗證碼的驗證，都是屬於 挑戰回應(Challenge/Response) 的方法。
+挑戰回應 的方法具體來說，是指由正在溝通的兩方其中之一發起一個 挑戰 (Challenge)，而另一方提供一個正確可被驗證的合法答案 (Response)。
+最常見的使用情境就是使用密碼驗證，比方說在電商網站購物前送出訂單之前請買家在網頁上再輸入一次密碼，如果密碼正確 (Valid response) ，則可以確認是由本人進行的操作。
+但使用密碼作為驗證手段所衍生出的資安議題非常多，比方說網站管理者可能為了安全性而要求用戶使用的密碼複雜度必須足夠，但過於複雜的密碼常常會讓使用者記不起來，所以就寫在便條紙、記在手機備忘錄或存在檔案中，造成密碼洩漏的問題，而這也是 Apple, Google 及 Microsoft 三大廠商都主推無密碼認證的原因之一。</description></item><item><title>簡易密碼學介紹</title><link>https://yishiashia.github.io/posts/introduction-to-basic-cryptography/</link><pubDate>Mon, 07 Nov 2022 16:12:47 +0800</pubDate><guid>https://yishiashia.github.io/posts/introduction-to-basic-cryptography/</guid><description>在早期，密碼學(Cryptography)是泛指隱藏訊息(hiding information)的方法，背後相關的知識包含數學、電腦科學(Computer science)及工程學等等，但時至今日，密碼學除了隱藏訊息之外，也同樣注重資訊安全屬性中的資訊完整性與不可抵賴性。
+資訊完整性可透過驗算訊息驗證碼(如雜湊值或 checksum 等)來確認訊息沒有被人竄改過，而不可抵賴性則可以透過數位簽章的方式來驗證，下面來詳細說明。
+加密演算法介紹 加密演算法是指訊息交換的雙方透過約定的密鑰(key)對訊息加密，原始的訊息(明文，plaintext)經過加密後會變成密文(cyphertext)，密文只有透過密鑰才可以還原回可閱讀的明文，因此可以放心透過網路或其他方式進行傳輸。
+根據密鑰的特性一般可分作 對稱式加密演算法 及 非對稱式加密演算法，非對稱式加密演算法是指訊息傳遞者會產生一對 公鑰(public key) 及 私鑰(private key)。
+1. 對稱式加密演算法 訊息交換雙方共享一組密鑰(key)，這密鑰就相當於兩人共享的秘密(shared secret)，沒有第三者知道。
+當訊息要由A君傳送給B君時，A君會使用共享的密鑰對訊息進行加密，然後將加密後的密文傳遞給B君，B君再透過兩人共享的密鑰對密文進行解密，就可以取得明文的內容。
+目前常見的對稱式加密演算法有一般網頁瀏覽時SSL/TLS加密使用的AES加密演算法，在 SSL/TLS handshake 時，瀏覽器跟網站伺服器間會協商出一個本次瀏覽期間使用的共享密鑰，在這次瀏覽期間使用的網頁封包都會透過這組密鑰進行加密。
+2. 非對稱式加密演算法 明文透過公鑰加密變成密文後，需要透過對應的私鑰進行解密才能還原回明文；相反的，如果明文是透過私鑰進行加密變成密文，則需要透過對應的公鑰進行解密才能還原成明文。
+圖片來源: 維基百科
+而公私鑰的保存依照字面上的意思，私鑰需要由訊息傳遞者自己保存好，不能被別人知道(用以確保訊息是本人發送)，而公鑰顧名思義則是需要公開給所有人知道，一般的應用會透過可信任的第三方來保管所有訊息傳遞者的公鑰，比如政府的自然人憑證或健保卡憑證都是由政府建置所謂的公開金鑰基礎建設 (英語：Public Key Infrastructure，縮寫：PKI)，透過 PKI ，我們就可以取得使用者的的公鑰來解密訊息。
+而上面我們提到非對稱式加密演算法的加解密特性與公私鑰的保管性質，就可以進行 數位簽章(確保是本人) 與 訊息保密 的動作。
+數位簽章： 透過私鑰對訊息進行加密後傳送，所有人都可以透過在PKI取得訊息傳遞者的公鑰，如果解密可以成功就代表是本人傳送的(因為私鑰只有本人有)。 訊息保密： 如果我們今天要傳遞訊息給特定的使用者A君，然後希望其他人都無法知道訊息的內容，則可以透過 PKI 取得 A君的公鑰，對訊息加密後進行傳輸，儘管訊息傳遞過程中間的人(比方説郵差)有經手這則訊息，但因為對應的私鑰只有A君本人有，所以郵差先生就無法解密而得知訊息的內容。</description></item></channel></rss>
