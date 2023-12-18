@@ -1,26 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>Theme on yishiashia&#39;s Blog</title>
-    <link>https://yishiashia.github.io/tags/theme/</link>
-    <description>Recent content in Theme on yishiashia&#39;s Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-TW</language>
-    <copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright>
-    <lastBuildDate>Wed, 10 Aug 2022 14:36:11 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/tags/theme/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>使用 CSS Variables 切換前端主題(Theme)</title>
-      <link>https://yishiashia.github.io/posts/switch-themes-with-css-variable/</link>
-      <pubDate>Wed, 10 Aug 2022 14:36:11 +0800</pubDate>
-      
-      <guid>https://yishiashia.github.io/posts/switch-themes-with-css-variable/</guid>
-      <description>前端專案時常需要進行主題(Theme)切換，比方說現在最常見的 light/dark mode 主題切換。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Theme on yishiashia's Blog</title><link>https://yishiashia.github.io/tags/theme/</link><description>Recent content in Theme on yishiashia's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-TW</language><copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright><lastBuildDate>Wed, 10 Aug 2022 14:36:11 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/tags/theme/index.xml" rel="self" type="application/rss+xml"/><item><title>使用 CSS Variables 切換前端主題(Theme)</title><link>https://yishiashia.github.io/posts/switch-themes-with-css-variable/</link><pubDate>Wed, 10 Aug 2022 14:36:11 +0800</pubDate><guid>https://yishiashia.github.io/posts/switch-themes-with-css-variable/</guid><description>前端專案時常需要進行主題(Theme)切換，比方說現在最常見的 light/dark mode 主題切換。
 本文將介紹如何透過 CSS Variables (或 CSS Custom Properties) 及 HTML root element 上的屬性控制前端網頁的主題切換。
 CSS Variables (或 CSS Custom Properties)是 CSS3 的新功能，讓您可以不用透過SASS、SCSS等預處理語言即可在原生 CSS 語法中使用變數，讓 CSS 語法也可以達到 Clean Code。
 1 2 3 4 5 6 7 8 9 10 11 :root { --primary-color: blue; } p { color: var(--primary-color); } h1 { color: var(--primary-color); } ▲範例：透過 CSS Variable 指定主題色彩的顏色
 上面是一個簡單的範例，透過一個 &amp;ndash;primary-color 的變數指定主題色彩，並套用到網頁中不同元的的樣式之中，未來要修改主題色時，只需要更新該變數，就可以一次性切換頁面中元件(如範例中的 與 標籤)的主題色，而不用一項一項的修改 CSS 樣式。
-Theme 主題切換 從前面的說明中可以得知，宣告 Theme 相關的 CSS Variables 時通常會將變數的定義寫在 :root 的區塊中讓全域的 element 元件都可以取用，這意思就是說 CSS 變數需要定義在 document.</description>
-    </item>
-    
-  </channel>
-</rss>
+Theme 主題切換 從前面的說明中可以得知，宣告 Theme 相關的 CSS Variables 時通常會將變數的定義寫在 :root 的區塊中讓全域的 element 元件都可以取用，這意思就是說 CSS 變數需要定義在 document.</description></item></channel></rss>

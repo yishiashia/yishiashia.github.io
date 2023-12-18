@@ -1,20 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>Front-end on yishiashia&#39;s Blog</title>
-    <link>https://yishiashia.github.io/tags/front-end/</link>
-    <description>Recent content in Front-end on yishiashia&#39;s Blog</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-TW</language>
-    <copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright>
-    <lastBuildDate>Sat, 16 Dec 2023 22:00:11 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/tags/front-end/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Web Components 介紹與實作說明 (2) | 實作一個 Tooltip 元件</title>
-      <link>https://yishiashia.github.io/posts/webcomponent-introduction-2/</link>
-      <pubDate>Sat, 16 Dec 2023 22:00:11 +0800</pubDate>
-      
-      <guid>https://yishiashia.github.io/posts/webcomponent-introduction-2/</guid>
-      <description>先前我們介紹了關於 WebComponents 以及他的三大核心內容，這裡我們要透過一個實際的案例來建立一個 Tooltip UI 元件，來進一步熟悉 WebComponent 的實作方式。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Front-end on yishiashia's Blog</title><link>https://yishiashia.github.io/tags/front-end/</link><description>Recent content in Front-end on yishiashia's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh-TW</language><copyright>© 2023. Content on this site is licensed under a CC BY 4.0 license.</copyright><lastBuildDate>Sat, 16 Dec 2023 22:00:11 +0800</lastBuildDate><atom:link href="https://yishiashia.github.io/tags/front-end/index.xml" rel="self" type="application/rss+xml"/><item><title>Web Components 介紹與實作說明 (2) | 實作一個 Tooltip 元件</title><link>https://yishiashia.github.io/posts/webcomponent-introduction-2/</link><pubDate>Sat, 16 Dec 2023 22:00:11 +0800</pubDate><guid>https://yishiashia.github.io/posts/webcomponent-introduction-2/</guid><description>先前我們介紹了關於 WebComponents 以及他的三大核心內容，這裡我們要透過一個實際的案例來建立一個 Tooltip UI 元件，來進一步熟悉 WebComponent 的實作方式。
 在這篇文章中我們會先在頁面的 html 使用 template，然後定義一個 CustomElement 來簡單實作 WebComponent。
 後續在另外的章節，我們會再介紹如何將我們實作的 WebComponent 模組化並上傳到 CDN 上供直接使用。
 Tooltips 元件 Tooltips 元件是指當滑鼠移到特定網頁元件上，上方或指定方向會跳出一個泡泡提示窗並帶有提示內容文字或是 HTML 內容，可參考下圖:
@@ -23,81 +7,32 @@ Tooltips 元件 Tooltips 元件是指當滑鼠移到特定網頁元件上，上�
 可以在指定元件上方出現泡泡。 泡泡內可以帶入指定文字或 HTML。 泡泡提示窗可以帶一個箭頭指向指向目標內容元件。 當泡泡提示窗在網頁邊緣顯示時，可以自動往網頁中心內縮，避免超出網頁內容區。 那要使用 WebComponent Custom Elements 來實作 Tooltips 元件，我們先假定實作的 html tag 叫做 my-tooltip，如果要在一個圖片上加上提示窗，希望語法會是:
 1 2 3 4 &amp;lt;my-tooltip alt=&amp;#34;這是一張圖片&amp;#34;&amp;gt; &amp;lt;div n&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;img src=&amp;#34;a.jpg&amp;#34; /&amp;gt; &amp;lt;/my-tooltip&amp;gt; 而希望畫面呈現出來會像這樣:
 而如果要使用 HTML 當作提示窗的內容，則希望語法會是像這樣:
-1 2 3 4 5 6 7 8 9 &amp;lt;my-tooltip&amp;gt; &amp;lt;!</description>
-    </item>
-    
-    <item>
-      <title>Web Components 介紹與實作說明 (1)</title>
-      <link>https://yishiashia.github.io/posts/webcomponent-introduction-1/</link>
-      <pubDate>Wed, 29 Nov 2023 11:24:11 +0800</pubDate>
-      
-      <guid>https://yishiashia.github.io/posts/webcomponent-introduction-1/</guid>
-      <description>介紹 Angular Components、ReactJS Components、VueJS Components 通通都有，就是沒有屬於 VanillaJS 的 Components，所以今後只好自己創造 (大誤)。
+1 2 3 4 5 6 7 8 9 &amp;lt;my-tooltip&amp;gt; &amp;lt;!</description></item><item><title>Web Components 介紹與實作說明 (1)</title><link>https://yishiashia.github.io/posts/webcomponent-introduction-1/</link><pubDate>Wed, 29 Nov 2023 11:24:11 +0800</pubDate><guid>https://yishiashia.github.io/posts/webcomponent-introduction-1/</guid><description>介紹 Angular Components、ReactJS Components、VueJS Components 通通都有，就是沒有屬於 VanillaJS 的 Components，所以今後只好自己創造 (大誤)。
 其實早在 2011 年， Web Components 的概念就已經被提出，除了希望可以建立重複使用的 Web UI 元件外，也帶入了封裝的概念，如透過 Shadow DOM 的引入以封裝 Custom Element 的 CSS 樣式，避免互相污染，另外透過 Custom Element 中自定義的行為來達到功能上的封裝與重用性。
 上面提到 Shadow DOM 、 Custom Elements，另外還有 HTML Template 為 Web Components 主要的三個核心內容，以下我們就分別介紹這三項核心內容。
 Custom elements Custom elements 透過原生 JavaScript APIs 來自定義客製化 HTML 標籤，包含它的 attributes、properties與 events 等，方便依照網站設計的客製化需求來使用。
-1 2 3 4 5 6 class MyCustomElement extends HTMLElement { ... } // 定義 Custom element window.</description>
-    </item>
-    
-    <item>
-      <title>網頁深色模式與 CSS 相關屬性</title>
-      <link>https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/</link>
-      <pubDate>Tue, 28 Nov 2023 14:39:11 +0800</pubDate>
-      
-      <guid>https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/</guid>
-      <description>介紹 現代人由於工作、娛樂目的而長時間使用像是手機、電腦等 3C 產品，時間久了往往會造成眼睛疲勞不適，因此現在的網頁或 APP 介面往往會提供深色模式或是夜間模式，除了可以減少裝置電量的消耗，也可以減少光線對眼睛的刺激。
+1 2 3 4 5 6 class MyCustomElement extends HTMLElement { ... } // 定義 Custom element window.</description></item><item><title>網頁深色模式與 CSS 相關屬性</title><link>https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/</link><pubDate>Tue, 28 Nov 2023 14:39:11 +0800</pubDate><guid>https://yishiashia.github.io/posts/dark-mode-and-css-color-scheme/</guid><description>介紹 現代人由於工作、娛樂目的而長時間使用像是手機、電腦等 3C 產品，時間久了往往會造成眼睛疲勞不適，因此現在的網頁或 APP 介面往往會提供深色模式或是夜間模式，除了可以減少裝置電量的消耗，也可以減少光線對眼睛的刺激。
 因此在前端網頁上實作亮色、深色模式也變成了提升使用者閱讀體驗所不可缺少的設計之一，因此，以下我們將說明如何透過 CSS 原生的 color-scheme 屬性來建置同時支援亮色 / 深色模式的網頁。
 使用者代理樣式表 (User agent stylesheet) 使用者代理樣式表 (或有人翻譯作瀏覽器預設樣式表)，為瀏覽器針對原生 html 元件像是文字、輸入框或按鈕等預設的樣式。
 以下我們撰寫了一個簡單 html 頁面，其中包含了一個 &amp;lt;h1&amp;gt; 元件:
 1 2 3 4 5 &amp;lt;html lang=&amp;#34;en&amp;#34;&amp;gt; &amp;lt;body&amp;gt; &amp;lt;h1&amp;gt;hello&amp;lt;/h1&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt; 在 Edge 瀏覽器中打開後，使用 devtool 觀察樣式可以看到下列的樣式，這個就是套用了瀏覽器預設的樣式表中關於 &amp;lt;h1&amp;gt; 元件的樣式。
-1 2 3 4 5 6 7 8 9 h1 { display: block; font-size: 2em; margin-block-start: 0.67em; margin-block-end: 0.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold; } 除了對於各個 html 元件提供預設的樣式表之外，現在的主流瀏覽器也提供各元件在深色模式下的樣式表，而我們可以透過 color-scheme 來啟用它。</description>
-    </item>
-    
-    <item>
-      <title>使用 WebAuthn 實作無密碼驗證與 Passkey 介紹</title>
-      <link>https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/</link>
-      <pubDate>Tue, 15 Nov 2022 16:22:57 +0800</pubDate>
-      
-      <guid>https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/</guid>
-      <description>Google、Apple、微軟及數百間科技公司或服務商在今年 (2022) 不約而同的表態支持 FIDO 聯盟與 W3C 所主推的通用無密碼登入標準 (common passwordless sign-in standard)，希望能透過例如指紋、Face ID等認證手段替代原本的密碼登入機制，提供用戶在網頁登入時一個更安全、防網路釣魚、即時交易驗證的登入方式。
+1 2 3 4 5 6 7 8 9 h1 { display: block; font-size: 2em; margin-block-start: 0.67em; margin-block-end: 0.67em; margin-inline-start: 0px; margin-inline-end: 0px; font-weight: bold; } 除了對於各個 html 元件提供預設的樣式表之外，現在的主流瀏覽器也提供各元件在深色模式下的樣式表，而我們可以透過 color-scheme 來啟用它。</description></item><item><title>使用 WebAuthn 實作無密碼驗證與 Passkey 介紹</title><link>https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/</link><pubDate>Tue, 15 Nov 2022 16:22:57 +0800</pubDate><guid>https://yishiashia.github.io/posts/passkey-and-webauthn-passwordless-authentication/</guid><description>Google、Apple、微軟及數百間科技公司或服務商在今年 (2022) 不約而同的表態支持 FIDO 聯盟與 W3C 所主推的通用無密碼登入標準 (common passwordless sign-in standard)，希望能透過例如指紋、Face ID等認證手段替代原本的密碼登入機制，提供用戶在網頁登入時一個更安全、防網路釣魚、即時交易驗證的登入方式。
 Google 在今年10月上旬宣布在 Android 及 Chrome 導入 Passkey 無密碼認證機制，而 Apple 也將在 iOS 16 和 macOS Ventura 引入 Passkey ，透過掃描 QR Code 加上藍芽或其他裝置通訊技術，讓你可以透過手機的 Touch ID 或 Face ID 就可以登入你所有的電腦、平板等裝置。
 下面我們會先說明需要使用密碼跟無密碼認證使用的場景，再深入介紹實務上使用 FIDO2 進行註冊與認證 (含範例程式)，最後再總結 FIDO2 / WebAuthn 與 Passkey 的關係 。
 通常需要用到 ”密碼” 或 ”認證” 的場合，像是在電商網站買東西、下訂單最後要結帳的時候會請你輸入帳號、密碼做登入(不登入的話也可能會要求你透過手機簡訊驗證碼做實名制驗證)，可以用以確保您在真實世界的身分。
 在資訊安全的領域中，不管是帳號密碼或是手機簡訊驗證碼的驗證，都是屬於 挑戰回應(Challenge/Response) 的方法。
 挑戰回應 的方法具體來說，是指由正在溝通的兩方其中之一發起一個 挑戰 (Challenge)，而另一方提供一個正確可被驗證的合法答案 (Response)。
 最常見的使用情境就是使用密碼驗證，比方說在電商網站購物前送出訂單之前請買家在網頁上再輸入一次密碼，如果密碼正確 (Valid response) ，則可以確認是由本人進行的操作。
-但使用密碼作為驗證手段所衍生出的資安議題非常多，比方說網站管理者可能為了安全性而要求用戶使用的密碼複雜度必須足夠，但過於複雜的密碼常常會讓使用者記不起來，所以就寫在便條紙、記在手機備忘錄或存在檔案中，造成密碼洩漏的問題，而這也是 Apple, Google 及 Microsoft 三大廠商都主推無密碼認證的原因之一。</description>
-    </item>
-    
-    <item>
-      <title>使用 indexedDB 離線儲存圖片</title>
-      <link>https://yishiashia.github.io/posts/offline-image-storage-using-indexeddb/</link>
-      <pubDate>Fri, 07 Oct 2022 15:51:22 +0800</pubDate>
-      
-      <guid>https://yishiashia.github.io/posts/offline-image-storage-using-indexeddb/</guid>
-      <description>緣起 由於最近碰到要在負責的網頁式聊天機器人中，新增如同Line聊天室的貼圖功能，可想而知會有大量的貼圖圖片會需要在用戶裝置瀏覽器進行下載，不管是對圖片伺服器或是用戶等待的過程來說都是不小的負擔。
+但使用密碼作為驗證手段所衍生出的資安議題非常多，比方說網站管理者可能為了安全性而要求用戶使用的密碼複雜度必須足夠，但過於複雜的密碼常常會讓使用者記不起來，所以就寫在便條紙、記在手機備忘錄或存在檔案中，造成密碼洩漏的問題，而這也是 Apple, Google 及 Microsoft 三大廠商都主推無密碼認證的原因之一。</description></item><item><title>使用 indexedDB 離線儲存圖片</title><link>https://yishiashia.github.io/posts/offline-image-storage-using-indexeddb/</link><pubDate>Fri, 07 Oct 2022 15:51:22 +0800</pubDate><guid>https://yishiashia.github.io/posts/offline-image-storage-using-indexeddb/</guid><description>緣起 由於最近碰到要在負責的網頁式聊天機器人中，新增如同Line聊天室的貼圖功能，可想而知會有大量的貼圖圖片會需要在用戶裝置瀏覽器進行下載，不管是對圖片伺服器或是用戶等待的過程來說都是不小的負擔。
 為了解決這個問題，透過使用了 PWA (Progressive Web App) 技術中常用的離線儲存方案 indexedDB 來快取貼圖圖片，不僅減少用戶端與網站伺服器端的連線流量，也提升的用戶體驗(UX: User Experience) 。
 Service Worker Service Worker是一個事件驅動的網站 Worker，根據不同的來源 (origin) 與網址路徑 (path) 進行註冊後，之後再次訪問同一網站後即會在背景執行這個 Service Worker。
 Service Worker 無法直接存取 DOM 物件，他負責監聽和處理像是 fetch, notification(推播), sync 還有 Service Worker 註冊、啟動 等相關事件。
 透過處理上述事件，我們可以讓 web 網頁像一般的手機原生 App 一樣可以執行安裝、發送推播、離線瀏覽及連線後同步等等作業。
 離線儲存 常見的 Ｗeb 儲存方案有下面幾種:
 Cookie LocalStorage Cache (precache) indexedDB 一般 SPA (Single Page Application) 中比較常用的是 Cookie 跟 LocalStorage 兩種儲存方法，不過在使用上都會有大小的限制（無法儲存較大的網站資源），像是 LocalStorage 的限制依照瀏覽器不同會落在大約 2MB ~ 10MB 左右，超過後就會發出Error。
-而在 PWA 的離線儲存上通常會使用 Cache(precache) 或 indexedDB 來實作，它們的大小通常跟使用者裝置的 disk 空間有關係，以 Chrome 為例，所有網站可以用的共享儲存空間為硬碟可用空間的1/3, 每個網站 App 可以使用共享空間中的 20%。</description>
-    </item>
-    
-    <item>
-      <title>使用 CSS Variables 切換前端主題(Theme)</title>
-      <link>https://yishiashia.github.io/posts/switch-themes-with-css-variable/</link>
-      <pubDate>Wed, 10 Aug 2022 14:36:11 +0800</pubDate>
-      
-      <guid>https://yishiashia.github.io/posts/switch-themes-with-css-variable/</guid>
-      <description>前端專案時常需要進行主題(Theme)切換，比方說現在最常見的 light/dark mode 主題切換。
+而在 PWA 的離線儲存上通常會使用 Cache(precache) 或 indexedDB 來實作，它們的大小通常跟使用者裝置的 disk 空間有關係，以 Chrome 為例，所有網站可以用的共享儲存空間為硬碟可用空間的1/3, 每個網站 App 可以使用共享空間中的 20%。</description></item><item><title>使用 CSS Variables 切換前端主題(Theme)</title><link>https://yishiashia.github.io/posts/switch-themes-with-css-variable/</link><pubDate>Wed, 10 Aug 2022 14:36:11 +0800</pubDate><guid>https://yishiashia.github.io/posts/switch-themes-with-css-variable/</guid><description>前端專案時常需要進行主題(Theme)切換，比方說現在最常見的 light/dark mode 主題切換。
 本文將介紹如何透過 CSS Variables (或 CSS Custom Properties) 及 HTML root element 上的屬性控制前端網頁的主題切換。
 CSS Variables (或 CSS Custom Properties)是 CSS3 的新功能，讓您可以不用透過SASS、SCSS等預處理語言即可在原生 CSS 語法中使用變數，讓 CSS 語法也可以達到 Clean Code。
 1 2 3 4 5 6 7 8 9 10 11 :root { --primary-color: blue; } p { color: var(--primary-color); } h1 { color: var(--primary-color); } ▲範例：透過 CSS Variable 指定主題色彩的顏色
 上面是一個簡單的範例，透過一個 &amp;ndash;primary-color 的變數指定主題色彩，並套用到網頁中不同元的的樣式之中，未來要修改主題色時，只需要更新該變數，就可以一次性切換頁面中元件(如範例中的 與 標籤)的主題色，而不用一項一項的修改 CSS 樣式。
-Theme 主題切換 從前面的說明中可以得知，宣告 Theme 相關的 CSS Variables 時通常會將變數的定義寫在 :root 的區塊中讓全域的 element 元件都可以取用，這意思就是說 CSS 變數需要定義在 document.</description>
-    </item>
-    
-  </channel>
-</rss>
+Theme 主題切換 從前面的說明中可以得知，宣告 Theme 相關的 CSS Variables 時通常會將變數的定義寫在 :root 的區塊中讓全域的 element 元件都可以取用，這意思就是說 CSS 變數需要定義在 document.</description></item></channel></rss>
