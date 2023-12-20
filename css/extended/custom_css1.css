@@ -26,13 +26,36 @@ img {
   flex-direction: row;
   gap: 12px;
 }
-.post-entry .entry-cover {
-  max-width: 150px;
-  min-width: 80px;
-  margin: 0 !important;
-}
+
 .post-entry .entry-cover img {
   object-fit: cover;
   height: 100%;
   width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  .post-entry {
+    flex-direction: column;
+  }
+  /* .post-entry .entry-cover {
+    max-width: 80px;
+    min-width: 80px;
+    margin: 0 !important;
+  } */
+}
+
+@media screen and (min-width: 768px) {
+  .post-entry {
+    gap: 16px;
+  }
+  .post-entry .entry-cover {
+    max-width: 160px;
+    min-width: 160px;
+    margin: 0 !important;
+  }
+  .post-entry .entry-cover img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
 }
