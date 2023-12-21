@@ -54,3 +54,23 @@ img {
     width: 100%;
   }
 }
+
+/* related posts on footer */
+.post-footer h3 {
+  margin: 2em 0 1.2em;
+}
+
+.post-footer .related {
+  margin-bottom: 2em;
+}
+
+.post-footer .related ul {
+  padding-inline-start: 20px;
+}
+
+.post-footer .related a {
+  color: #3498db;
+}
+.post-footer .related a:hover {
+  box-shadow: 0 1px;
+}
