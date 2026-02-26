@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企業訂便當系統 (WebMCP Declarative API Demo)</title>
+    <!-- 引入 @mcp-b/global polyfill 以便在不支援的環境中模擬 -->
+    <script src="https://cdn.jsdelivr.net/npm/@mcp-b/global@latest/dist/browser.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e1e4e8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .description {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input {
+            width: auto;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        button.agent-btn {
+            background-color: #10b981;
+            margin-top: 1rem;
+        }
+
+        button.agent-btn:hover {
+            background-color: #059669;
+        }
+
+        #resultBox {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #d1fae5;
+            border: 1px solid #34d399;
+            border-radius: 4px;
+            color: #065f46;
+        }
+
+        .code-block {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🍱 企業訂便當系統</h1>
+
+    <div class="description">
+        <p>這是一個展示 <strong>WebMCP Declarative API</strong> 的範例網頁。</p>
+        <p>下方的表單透過 HTML 屬性 <code>toolname="orderLunch"</code> 與 <code>tooldescription="..."</code>，將一個標準的網頁表單轉化為 AI
+            Agent 可直接辨識與操作的工具。您可以使用人類方式手動填寫送出，或點擊「模擬 Agent 呼叫」觀察效果。</p>
+    </div>
+
+    <div class="card">
+        <!-- WebMCP Declarative API: 關鍵在於 toolname 和 tooldescription 屬性 -->
+        <form id="lunchForm" toolname="orderLunch"
+            tooldescription="Submit a lunch order for an employee. Contains information like name, department, meal type, spicy preference, and notes.">
+
+            <div class="form-group">
+                <label for="name">訂購人姓名 (Name)</label>
+                <input type="text" id="name" name="name" required placeholder="請輸入姓名">
+            </div>
+
+            <div class="form-group">
+                <label for="department">所屬部門 (Department)</label>
+                <select id="department" name="department" required>
+                    <option value="">請選擇部門</option>
+                    <option value="hr">人力資源部 (HR)</option>
+                    <option value="rd">研發部 (R&D)</option>
+                    <option value="sales">業務部 (Sales)</option>
+                    <option value="marketing">行銷部 (Marketing)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="meal_type">餐點種類 (Meal Type)</label>
+                <select id="meal_type" name="meal_type" required>
+                    <option value="">請選擇餐點</option>
+                    <option value="pork_ribs">招牌排骨飯</option>
+                    <option value="chicken_leg">香脆雞腿飯</option>
+                    <option value="fish">照燒鯖魚飯</option>
+                    <option value="vegetarian">健康素食餐 (蛋奶素)</option>
+                </select>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="spicy" name="spicy" value="true">
+                <label for="spicy" style="margin: 0;">是否加辣？(Spicy)</label>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">特殊需求 (Notes)</label>
+                <textarea id="notes" name="notes" rows="3" placeholder="例如：飯少、不要青椒..."></textarea>
+            </div>
+
+            <button type="submit" id="humanSubmitBtn">🙋‍♂️ 一般提交表單</button>
+        </form>
+
+        <hr style="margin: 2rem 0; border: none; border-top: 1px dashed var(--border-color);">
+
+        <h3>🤖 模擬 Agent 操作</h3>
+        <p style="font-size: 0.9rem; color: #666;">Agent 讀取表單 Schema 後，會自動填入資料並呼叫表單的 <code>requestSubmit()</code>：</p>
+        <div class="code-block" id="agentDataPreview">
+            {
+            "name": "AI 測試員",
+            "department": "rd",
+            "meal_type": "chicken_leg",
+            "spicy": "true",
+            "notes": "飯少"
+            }
+        </div>
+        <button type="button" class="agent-btn" id="agentSubmitBtn">🤖 模擬 Agent 填入資料並送出</button>
+
+        <div id="resultBox">
+            <strong>✅ 訂購成功！</strong><br>
+            收到來自 <span id="resName"></span> (<span id="resDept"></span>) 的訂單。<br>
+            餐點：<span id="resMeal"></span> <span id="resSpicy"></span><br>
+            備註：<span id="resNotes"></span>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('lunchForm');
+        const resultBox = document.getElementById('resultBox');
+
+        // 攔截表單送出事件，防止畫面跳轉，並顯示結果
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            document.getElementById('resName').textContent = data.name;
+
+            const deptMap = { 'hr': '人力資源部', 'rd': '研發部', 'sales': '業務部', 'marketing': '行銷部' };
+            document.getElementById('resDept').textContent = deptMap[data.department] || data.department;
+
+            const mealMap = { 'pork_ribs': '招牌排骨飯', 'chicken_leg': '香脆雞腿飯', 'fish': '照燒鯖魚飯', 'vegetarian': '健康素食餐' };
+            document.getElementById('resMeal').textContent = mealMap[data.meal_type] || data.meal_type;
+
+            document.getElementById('resSpicy').textContent = data.spicy ? '(🌶️ 加辣)' : '';
+            document.getElementById('resNotes').textContent = data.notes || '無';
+
+            resultBox.style.display = 'block';
+
+            // 3秒後隱藏結果
+            setTimeout(() => {
+                resultBox.style.display = 'none';
+                form.reset();
+            }, 5000);
+        });
+
+        // 模擬 Agent 操作行為
+        document.getElementById('agentSubmitBtn').addEventListener('click', () => {
+            // 1. Agent 填入推論好的資料
+            const agentData = {
+                name: "AI 測試員",
+                department: "rd",
+                meal_type: "chicken_leg",
+                spicy: true,
+                notes: "飯少"
+            };
+
+            form.elements['name'].value = agentData.name;
+            form.elements['department'].value = agentData.department;
+            form.elements['meal_type'].value = agentData.meal_type;
+            form.elements['spicy'].checked = agentData.spicy;
+            form.elements['notes'].value = agentData.notes;
+
+            // 2. Agent 呼叫送出
+            // 這裡加一點延遲讓使用者能看到資料填入的瞬間
+            setTimeout(() => {
+                form.requestSubmit();
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

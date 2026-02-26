@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電影院訂票與選位系統 (WebMCP Imperative API Demo)</title>
+    <!-- 引入 @mcp-b/global polyfill -->
+    <script src="https://cdn.jsdelivr.net/npm/@mcp-b/global@latest/dist/browser.js"></script>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --bg-color: #111827;
+            --card-bg: #1f2937;
+            --text-color: #f3f4f6;
+            --border-color: #374151;
+            --seat-avail: #4b5563;
+            --seat-booked: #ef4444;
+            --seat-selected: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #e5e7eb;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            background-color: #374151;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .screen {
+            background: linear-gradient(to bottom, #4f46e5, transparent);
+            height: 30px;
+            margin: 1rem 0 2rem 0;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            line-height: 30px;
+        }
+
+        .seats-grid {
+            display: grid;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .seat {
+            width: 30px;
+            height: 30px;
+            background-color: var(--seat-avail);
+            border-radius: 6px 6px 2px 2px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+            user-select: none;
+        }
+
+        .seat:hover:not(.booked) {
+            background-color: #6b7280;
+        }
+
+        .seat.booked {
+            background-color: var(--seat-booked);
+            cursor: not-allowed;
+        }
+
+        .seat.selected {
+            background-color: var(--seat-selected);
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #4f46e5;
+        }
+
+        button:disabled {
+            background-color: #4b5563;
+            cursor: not-allowed;
+        }
+
+        .inspector {
+            background-color: #0f172a;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            overflow-y: auto;
+            max-height: 400px;
+            color: #38bdf8;
+        }
+
+        .inspector-title {
+            color: #f472b6;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .agent-log {
+            background-color: #1e293b;
+            border-left: 3px solid #10b981;
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🎟️ 電影院訂票選位系統</h1>
+    <p style="text-align: center; color: #9ca3af; max-width: 600px; margin: 0 auto 2rem auto;">
+        此範例展示 <strong>WebMCP Imperative API</strong>。使用 JavaScript <code>navigator.modelContext.registerTool()</code>
+        動態註冊工具，支援複雜的 JSON Schema 與非同步互動。
+    </p>
+
+    <div class="grid-container">
+        <!-- 左側：互動介面 -->
+        <div class="card">
+            <h3>🎫 訂票介面 (人類與 UI)</h3>
+            <div class="form-group">
+                <label for="movieSelect">選擇電影</label>
+                <select id="movieSelect">
+                    <option value="">請選擇...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="showtimeSelect">選擇場次</label>
+                <select id="showtimeSelect" disabled>
+                    <option value="">請先選擇電影</option>
+                </select>
+            </div>
+
+            <div id="seatSelectionArea" style="display: none; margin-top: 1.5rem;">
+                <div class="screen">螢幕 Screen</div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: var(--seat-avail)"></div> 空位
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: var(--seat-selected)"></div> 已選
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: var(--seat-booked)"></div> 已售出
+                    </div>
+                </div>
+                <div class="seats-grid" id="seatsGrid"></div>
+                <div style="text-align: center; margin: 1rem 0; font-size: 0.9rem;">
+                    已選座位: <span id="selectedSeatsList" style="color: #10b981; font-weight: bold;">無</span>
+                </div>
+                <button id="bookBtn" disabled>確認訂位</button>
+            </div>
+
+            <div id="bookingResult"
+                style="display: none; margin-top: 1rem; padding: 1rem; background-color: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; border-radius: 4px; text-align: center; color: #34d399; font-weight: bold;">
+                ✅ 訂票成功！祝您觀影愉快。
+            </div>
+        </div>
+
+        <!-- 右側：WebMCP 工具狀態與 Agent 模擬 -->
+        <div class="card">
+            <h3>🛠️ WebMCP Tool Inspector</h3>
+            <p style="font-size: 0.8rem; color: #9ca3af;">以下是網頁透過 <code>registerTool()</code> 暴露給 AI Agent 的工具清單：</p>
+            <div class="inspector" id="toolInspector"></div>
+
+            <h3 style="margin-top: 1.5rem;">🤖 模擬 Agent 多步驟操作</h3>
+            <p style="font-size: 0.8rem; color: #9ca3af;">展示 Agent 如何自行呼叫工具來完成「查詢電影 -> 查詢座位 -> 訂票」的工作流，而不需點擊網頁 UI。</p>
+            <button id="simulateAgentBtn" style="background-color: #10b981;">▶️ 執行 Agent 訂票腳本</button>
+            <div id="agentLogs" style="margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 模擬後端資料 ---
+        const DB = {
+            movies: [
+                { id: 'm1', title: '沙丘：第二部 (Dune: Part Two)', showtimes: ['10:00', '14:30', '19:00'] },
+                { id: 'm2', title: '可憐的東西 (Poor Things)', showtimes: ['11:15', '16:45', '21:30'] }
+            ],
+            seats: {
+                'm1-10:00': ['A1', 'A2', 'C4', 'C5'], // 已售出的座位
+                'm1-14:30': ['D1', 'D2', 'D3'],
+                'm1-19:00': ['E4', 'E5', 'B2', 'B3'],
+                'm2-11:15': [],
+                'm2-16:45': ['A1', 'B1', 'C1'],
+                'm2-21:30': ['F5', 'F6']
+            }
+        };
+
+        const ROWS = ['A', 'B', 'C', 'D', 'E', 'F'];
+        const COLS = 6;
+        let currentSelections = [];
+
+        // --- UI 邏輯 ---
+        const elements = {
+            movieSelect: document.getElementById('movieSelect'),
+            showtimeSelect: document.getElementById('showtimeSelect'),
+            seatArea: document.getElementById('seatSelectionArea'),
+            seatsGrid: document.getElementById('seatsGrid'),
+            bookBtn: document.getElementById('bookBtn'),
+            selectedList: document.getElementById('selectedSeatsList'),
+            result: document.getElementById('bookingResult'),
+            inspector: document.getElementById('toolInspector')
+        };
+
+        // 1. 載入電影清單
+        DB.movies.forEach(m => {
+            elements.movieSelect.add(new Option(m.title, m.id));
+        });
+
+        // 2. 選擇電影後載入時間
+        elements.movieSelect.addEventListener('change', (e) => {
+            elements.showtimeSelect.innerHTML = '<option value="">請選擇場次</option>';
+            elements.seatArea.style.display = 'none';
+            elements.result.style.display = 'none';
+
+            const movie = DB.movies.find(m => m.id === e.target.value);
+            if (movie) {
+                elements.showtimeSelect.disabled = false;
+                movie.showtimes.forEach(t => elements.showtimeSelect.add(new Option(t, t)));
+            } else {
+                elements.showtimeSelect.disabled = true;
+            }
+        });
+
+        // 3. 選擇場次後繪製座位表
+        elements.showtimeSelect.addEventListener('change', (e) => {
+            elements.result.style.display = 'none';
+            if (!e.target.value) {
+                elements.seatArea.style.display = 'none';
+                return;
+            }
+            renderSeats(elements.movieSelect.value, e.target.value);
+        });
+
+        function renderSeats(movieId, time) {
+            elements.seatArea.style.display = 'block';
+            elements.seatsGrid.innerHTML = '';
+            elements.seatsGrid.style.gridTemplateColumns = `repeat(${COLS}, 30px)`;
+            currentSelections = [];
+            updateSelectedUI();
+
+            const key = `${movieId}-${time}`;
+            const booked = DB.seats[key] || [];
+
+            for (let r of ROWS) {
+                for (let c = 1; c <= COLS; c++) {
+                    const seatId = `${r}${c}`;
+                    const isBooked = booked.includes(seatId);
+
+                    const div = document.createElement('div');
+                    div.className = `seat ${isBooked ? 'booked' : ''}`;
+                    div.textContent = seatId;
+                    div.dataset.id = seatId;
+
+                    if (!isBooked) {
+                        div.addEventListener('click', () => {
+                            div.classList.toggle('selected');
+                            if (div.classList.contains('selected')) {
+                                currentSelections.push(seatId);
+                            } else {
+                                currentSelections = currentSelections.filter(s => s !== seatId);
+                            }
+                            currentSelections.sort();
+                            updateSelectedUI();
+                        });
+                    }
+                    elements.seatsGrid.appendChild(div);
+                }
+            }
+        }
+
+        function updateSelectedUI() {
+            elements.selectedList.textContent = currentSelections.length > 0 ? currentSelections.join(', ') : '無';
+            elements.bookBtn.disabled = currentSelections.length === 0;
+        }
+
+        // 訂票按鈕
+        elements.bookBtn.addEventListener('click', async () => {
+            const movieId = elements.movieSelect.value;
+            const time = elements.showtimeSelect.value;
+            const key = `${movieId}-${time}`;
+
+            // 更新 DB 並重繪
+            if (!DB.seats[key]) DB.seats[key] = [];
+            DB.seats[key].push(...currentSelections);
+
+            elements.seatArea.style.display = 'none';
+            elements.result.style.display = 'block';
+            setTimeout(() => {
+                elements.result.style.display = 'none';
+                elements.movieSelect.value = '';
+                elements.showtimeSelect.innerHTML = '<option value="">請先選擇電影</option>';
+                elements.showtimeSelect.disabled = true;
+            }, 3000);
+        });
+
+
+        // --- 核心：WebMCP Imperative API 註冊 ---
+
+        // 檢查瀏覽器是否支援 (或是否被 polyfill)
+        if (window.navigator && window.navigator.modelContext) {
+
+            const toolsToRegister = [
+                {
+                    name: "getMovies",
+                    description: "Get a list of movies currently showing and their available showtimes.",
+                    inputSchema: { type: "object", properties: {} },
+                    execute: async () => {
+                        return { content: [{ type: "text", text: JSON.stringify(DB.movies) }] };
+                    }
+                },
+                {
+                    name: "getAvailableSeats",
+                    description: "Get the seat map and availability for a specific movie and showtime.",
+                    inputSchema: {
+                        type: "object",
+                        properties: {
+                            movieId: { type: "string", description: "The ID of the movie" },
+                            showtime: { type: "string", description: "The showtime string (e.g., '14:30')" }
+                        },
+                        required: ["movieId", "showtime"]
+                    },
+                    execute: async ({ movieId, showtime }) => {
+                        const key = `${movieId}-${showtime}`;
+                        const booked = DB.seats[key];
+                        if (!booked) {
+                            return { isError: true, content: [{ type: "text", text: "Invalid movie or showtime." }] };
+                        }
+                        return {
+                            content: [{
+                                type: "text",
+                                text: JSON.stringify({ rows: ROWS, cols: COLS, bookedSeats: booked })
+                            }]
+                        };
+                    }
+                },
+                {
+                    name: "bookTickets",
+                    description: "Book specific seats for a movie. Use getAvailableSeats first to ensure seats are empty.",
+                    inputSchema: {
+                        type: "object",
+                        properties: {
+                            movieId: { type: "string" },
+                            showtime: { type: "string" },
+                            seats: {
+                                type: "array",
+                                items: { type: "string" },
+                                description: "Array of seat codes to book, e.g. ['C3', 'C4']"
+                            }
+                        },
+                        required: ["movieId", "showtime", "seats"]
+                    },
+                    execute: async ({ movieId, showtime, seats }) => {
+                        const key = `${movieId}-${showtime}`;
+                        if (!DB.seats[key]) return { isError: true, content: [{ type: "text", text: "Invalid session." }] };
+
+                        // 驗證是否已被訂位
+                        const conflict = seats.find(s => DB.seats[key].includes(s));
+                        if (conflict) {
+                            return { isError: true, content: [{ type: "text", text: `Seat ${conflict} is already booked!` }] };
+                        }
+
+                        // 執行訂位
+                        DB.seats[key].push(...seats);
+
+                        // 同步更新 UI 以展示 Agent 的操作能影響畫面
+                        if (elements.movieSelect.value === movieId && elements.showtimeSelect.value === showtime) {
+                            renderSeats(movieId, showtime);
+                        }
+
+                        return {
+                            content: [{ type: "text", text: `Successfully booked tickets for ${seats.join(', ')}.` }]
+                        };
+                    }
+                }
+            ];
+
+            // 註冊工具並顯示在 Inspector 內
+            toolsToRegister.forEach(tool => {
+                window.navigator.modelContext.registerTool(tool);
+
+                const div = document.createElement('div');
+                div.style.marginBottom = '1.5rem';
+                div.innerHTML = `
+          <div class="inspector-title">🔧 ${tool.name}</div>
+          <div style="color: #94a3b8; margin-bottom: 0.5rem;">${tool.description}</div>
+          <div>Schema: ${JSON.stringify(tool.inputSchema, null, 2).replace(/\n/g, '<br>&nbsp;&nbsp;')}</div>
+        `;
+                elements.inspector.appendChild(div);
+            });
+
+        } else {
+            elements.inspector.innerHTML = '<span style="color:#ef4444">您的瀏覽器不支援 navigator.modelContext。請確認已載入 polyfill 或使用支援的瀏覽器並開啟 flag。</span>';
+        }
+
+
+        // --- 模擬 Agent 行為 ---
+        document.getElementById('simulateAgentBtn').addEventListener('click', async () => {
+            const logs = document.getElementById('agentLogs');
+            logs.innerHTML = '';
+            const log = (msg) => {
+                const div = document.createElement('div');
+                div.className = 'agent-log';
+                div.textContent = `> ${msg}`;
+                logs.appendChild(div);
+            };
+
+            document.getElementById('simulateAgentBtn').disabled = true;
+
+            // Agent 思考流程模擬
+            log("Agent: '使用者想要訂 2 張沙丘晚上的票。讓我先查一下電影清單...'");
+            log("調用工具: getMovies()");
+
+            // 故意延遲營造真實感
+            await new Promise(r => setTimeout(r, 1000));
+
+            const moviesDump = JSON.stringify(DB.movies.map(m => m.title));
+            log(`得到結果: ${moviesDump}`);
+            log("Agent: '沙丘的 ID 是 m1，晚上的場次是 19:00。我要查一下剩餘座位...'");
+
+            // 幫使用者操作 UI (這只是視覺效果，實際上 Agent 在背景 API 做)
+            elements.movieSelect.value = 'm1';
+            elements.movieSelect.dispatchEvent(new Event('change'));
+
+            await new Promise(r => setTimeout(r, 1000));
+            log("調用工具: getAvailableSeats({ movieId: 'm1', showtime: '19:00' })");
+
+            elements.showtimeSelect.value = '19:00';
+            elements.showtimeSelect.dispatchEvent(new Event('change'));
+
+            await new Promise(r => setTimeout(r, 1000));
+            const booked = DB.seats['m1-19:00'];
+            log(`得到結果: 已售出 [${booked.join(', ')}]`);
+            log("Agent: 'E4, E5 賣掉了，那我幫他訂 E1, E2 好了。'");
+
+            await new Promise(r => setTimeout(r, 1500));
+            log("調用工具: bookTickets({ movieId: 'm1', showtime: '19:00', seats: ['E1', 'E2'] })");
+
+            // 直接修改底層資料來模擬 Agent 通過 API book 成功
+            DB.seats['m1-19:00'].push('E1', 'E2');
+            // 強制 UI 重繪
+            renderSeats('m1', '19:00');
+
+            await new Promise(r => setTimeout(r, 800));
+            log("得到結果: Successfully booked tickets for E1, E2.");
+            log("Agent: 任務完成！已為您成功訂了沙丘 19:00 的 E1, E2 座位。");
+
+            elements.result.style.display = 'block';
+            setTimeout(() => {
+                elements.result.style.display = 'none';
+                document.getElementById('simulateAgentBtn').disabled = false;
+            }, 5000);
+        });
+    </script>
+</body>
+
+</html>
