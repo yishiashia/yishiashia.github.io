@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 340" role="img" aria-label="先評估風險，再依風險等級選擇治理強度；風險等級越高，治理要求越嚴格，若要降級則必須重新評估並留下理由">
+  <defs>
+    <style>
+      .bg{fill:#f6f9fb;stroke:#e2e8f0;}
+      .box{fill:#ffffff;stroke:#179f7c;stroke-width:1.5;}
+      .ink{fill:#0b1728;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .muted{fill:#708199;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .mint{fill:#179f7c;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .arrow{stroke:#708199;stroke-width:2;fill:none;}
+      .head{fill:#708199;}
+      .up{stroke:#179f7c;stroke-width:3;fill:none;}
+      .uphead{fill:#179f7c;}
+      .divider{stroke:#e2e8f0;stroke-width:1;}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0.5" y="0.5" width="939" height="339" rx="16"/>
+
+  <text class="ink" x="470" y="40" text-anchor="middle" font-size="20" font-weight="700">先依風險判定，再選擇對應的治理手段</text>
+
+  <!-- Decision box -->
+  <rect class="box" x="40" y="130" width="180" height="100" rx="14"/>
+  <text class="ink" x="130" y="176" text-anchor="middle" font-size="17" font-weight="700">風險判定</text>
+  <text class="muted" x="130" y="202" text-anchor="middle" font-size="12">評估每一個變更</text>
+
+  <!-- Arrow decision -> tiers -->
+  <line class="arrow" x1="222" y1="180" x2="290" y2="180"/>
+  <polygon class="head" points="296,180 288,175 288,185"/>
+
+  <!-- Tier: 高風險 (top, strictest) -->
+  <rect x="300" y="78" width="430" height="72" rx="12" fill="#fce9e4" stroke="#eab3a6"/>
+  <text x="326" y="120" font-size="16" font-weight="700" fill="#c0432a" font-family="'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif">高風險</text>
+  <line class="divider" x1="424" y1="94" x2="424" y2="134"/>
+  <text class="ink" x="446" y="120" font-size="15">完整把關、人工審查</text>
+
+  <!-- Tier: 中風險 -->
+  <rect x="300" y="164" width="430" height="72" rx="12" fill="#fdf1dd" stroke="#eccf96"/>
+  <text x="326" y="206" font-size="16" font-weight="700" fill="#b5791f" font-family="'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif">中風險</text>
+  <line class="divider" x1="424" y1="180" x2="424" y2="220"/>
+  <text class="ink" x="446" y="206" font-size="15">標準審查與檢查</text>
+
+  <!-- Tier: 低風險 (bottom, lightest) -->
+  <rect x="300" y="250" width="430" height="72" rx="12" fill="#e6f6ef" stroke="#a3d8c5"/>
+  <text x="326" y="292" font-size="16" font-weight="700" fill="#178b6b" font-family="'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif">低風險</text>
+  <line class="divider" x1="424" y1="266" x2="424" y2="306"/>
+  <text class="ink" x="446" y="292" font-size="15">輕量流程、快速放行</text>
+
+  <!-- Governance intensity increases with risk -->
+  <line class="up" x1="772" y1="316" x2="772" y2="92"/>
+  <polygon class="uphead" points="772,80 765,94 779,94"/>
+  <text class="mint" x="792" y="142" font-size="15" font-weight="700">風險等級越高</text>
+  <text class="muted" x="792" y="166" font-size="11">治理要求越嚴格</text>
+  <text class="muted" x="792" y="188" font-size="11">若要降級，需重新評估</text>
+  <text class="muted" x="792" y="204" font-size="11">並留下清楚理由</text>
+</svg>
