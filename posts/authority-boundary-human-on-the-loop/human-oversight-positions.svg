@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 430" role="img" aria-label="Human-in-the-loop 與 Human-on-the-loop 依風險共存的授權位置">
+  <defs>
+    <style>
+      .bg{fill:#fbf7f9;stroke:#eadde4;}
+      .card{fill:#ffffff;stroke:#e5d5de;}
+      .ink{fill:#2a1d2c;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .muted{fill:#806e7b;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .rose{fill:#c84d79;}
+      .mauve{fill:#a36aa9;}
+      .rule{stroke:#eee3e8;stroke-width:1;}
+      .check-rose{fill:none;stroke:#c84d79;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+      .check-mauve{fill:none;stroke:#a36aa9;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0.5" y="0.5" width="1099" height="429" rx="16"/>
+  <text class="ink" x="550" y="39" text-anchor="middle" font-size="21" font-weight="700">Human-in-the-loop 與 Human-on-the-loop 可以共存</text>
+  <text class="muted" x="550" y="64" text-anchor="middle" font-size="13">依風險把人的決策與監督放在需要的位置</text>
+
+  <g>
+    <rect class="card" x="32" y="102" width="500" height="222" rx="14"/>
+    <rect class="rose" x="32" y="102" width="500" height="58" rx="14"/>
+    <rect class="rose" x="32" y="142" width="500" height="18"/>
+    <text x="58" y="138" fill="#fff" font-size="17" font-weight="700" font-family="'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif">Human-in-the-loop</text>
+    <text x="502" y="137" text-anchor="end" fill="#fff" font-size="13" font-weight="700">HITL</text>
+    <path class="check-rose" d="M54 196l7 7 13-16"/>
+    <path class="check-rose" d="M54 235l7 7 13-16"/>
+    <path class="check-rose" d="M54 274l7 7 13-16"/>
+    <text class="ink" x="92" y="202" font-size="14">人在需要人工決策的關鍵節點</text>
+    <text class="ink" x="92" y="241" font-size="14">高風險、不可逆或例外情境</text>
+    <text class="ink" x="92" y="280" font-size="14">不等於逐行看完所有 code</text>
+  </g>
+
+  <g>
+    <rect class="card" x="568" y="102" width="500" height="222" rx="14"/>
+    <rect class="mauve" x="568" y="102" width="500" height="58" rx="14"/>
+    <rect class="mauve" x="568" y="142" width="500" height="18"/>
+    <text x="594" y="138" fill="#fff" font-size="17" font-weight="700" font-family="'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif">Human-on-the-loop</text>
+    <text x="1038" y="137" text-anchor="end" fill="#fff" font-size="13" font-weight="700">HOTL</text>
+    <path class="check-mauve" d="M590 196l7 7 13-16"/>
+    <path class="check-mauve" d="M590 235l7 7 13-16"/>
+    <path class="check-mauve" d="M590 274l7 7 13-16"/>
+    <text class="ink" x="628" y="202" font-size="14">系統在既定政策內自主執行</text>
+    <text class="ink" x="628" y="241" font-size="14">人負責政策、監督、例外與介入</text>
+    <text class="ink" x="628" y="280" font-size="14">保有暫停、撤銷與切回人工的能力</text>
+  </g>
+
+  <line class="rule" x1="48" y1="361" x2="1052" y2="361"/>
+  <text class="ink" x="550" y="393" text-anchor="middle" font-size="14" font-weight="700">上移的是人的決策與監督位置，不是所有操作權限集中</text>
+</svg>

@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 440" role="img" aria-label="從合約、證據與獨立確認，到授權政策、共用治理路徑與自動化執行的放行流程">
+  <defs>
+    <style>
+      .bg{fill:#fbf7f9;stroke:#eadde4;}
+      .card{fill:#ffffff;stroke:#e5d5de;}
+      .ink{fill:#2a1d2c;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .muted{fill:#806e7b;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .rose{fill:#c84d79;}
+      .rose-text{fill:#ad3e67;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;font-weight:700;}
+      .mauve{fill:#a36aa9;}
+      .mauve-text{fill:#80538b;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;font-weight:700;}
+      .coral{fill:#e58b8e;}
+      .arrow{stroke:#927382;stroke-width:2;fill:none;}
+      .head{fill:#927382;}
+      .dash{stroke:#d6bdca;stroke-width:1.5;stroke-dasharray:5 5;}
+      .rule{stroke:#eee3e8;stroke-width:1;}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0.5" y="0.5" width="1159" height="439" rx="16"/>
+  <text class="ink" x="580" y="39" text-anchor="middle" font-size="21" font-weight="700">放行權限如何被委派與執行</text>
+  <text class="muted" x="580" y="64" text-anchor="middle" font-size="13">授權政策定義條件；自動化流程執行被授予的權限</text>
+
+  <g>
+    <rect class="card" x="24" y="99" width="260" height="216" rx="14"/>
+    <circle class="rose" cx="58" cy="133" r="16"/>
+    <text x="58" y="138" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">1</text>
+    <text class="rose-text" x="84" y="138" font-size="15">INPUT</text>
+    <text class="ink" x="46" y="178" font-size="19" font-weight="700">可對照的工作結果</text>
+    <line class="rule" x1="46" y1="195" x2="262" y2="195"/>
+    <text class="muted" x="46" y="222" font-size="13">Contract／Evidence</text>
+    <text class="muted" x="46" y="247" font-size="13">Attestation</text>
+    <text class="muted" x="46" y="272" font-size="13">實際被驗收的版本</text>
+  </g>
+
+  <g>
+    <rect class="card" x="304" y="99" width="260" height="216" rx="14"/>
+    <circle class="mauve" cx="338" cy="133" r="16"/>
+    <text x="338" y="138" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">2</text>
+    <text class="mauve-text" x="364" y="138" font-size="15">POLICY</text>
+    <text class="ink" x="326" y="178" font-size="19" font-weight="700">授權政策</text>
+    <line class="rule" x1="326" y1="195" x2="542" y2="195"/>
+    <text class="muted" x="326" y="222" font-size="13">適用範圍與風險條件</text>
+    <text class="muted" x="326" y="247" font-size="13">可以執行的動作</text>
+    <text class="muted" x="326" y="272" font-size="13">需要誰確認或介入</text>
+  </g>
+
+  <g>
+    <rect class="card" x="584" y="99" width="260" height="216" rx="14"/>
+    <circle class="mauve" cx="618" cy="133" r="16"/>
+    <text x="618" y="138" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">3</text>
+    <text class="mauve-text" x="644" y="138" font-size="15">CHECK</text>
+    <text class="ink" x="606" y="178" font-size="19" font-weight="700">共用治理路徑</text>
+    <line class="rule" x1="606" y1="195" x2="822" y2="195"/>
+    <text class="muted" x="606" y="222" font-size="13">authentication／scope</text>
+    <text class="muted" x="606" y="247" font-size="13">重新確認敏感操作</text>
+    <text class="muted" x="606" y="272" font-size="13">留下放行紀錄</text>
+  </g>
+
+  <g>
+    <rect class="card" x="864" y="99" width="272" height="216" rx="14"/>
+    <circle class="rose" cx="898" cy="133" r="16"/>
+    <text x="898" y="138" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">4</text>
+    <text class="rose-text" x="924" y="138" font-size="15">EXECUTE</text>
+    <text class="ink" x="886" y="178" font-size="19" font-weight="700">自動化執行</text>
+    <line class="rule" x1="886" y1="195" x2="1114" y2="195"/>
+    <text class="muted" x="886" y="222" font-size="13">merge／publish／deploy</text>
+    <text class="muted" x="886" y="247" font-size="13">依委派範圍執行</text>
+    <text class="muted" x="886" y="272" font-size="13">可暫停或切回人工</text>
+  </g>
+
+  <g>
+    <line class="arrow" x1="290" y1="207" x2="298" y2="207"/>
+    <polygon class="head" points="302,207 294,202 294,212"/>
+    <line class="arrow" x1="570" y1="207" x2="578" y2="207"/>
+    <polygon class="head" points="582,207 574,202 574,212"/>
+    <line class="arrow" x1="850" y1="207" x2="858" y2="207"/>
+    <polygon class="head" points="862,207 854,202 854,212"/>
+  </g>
+
+  <line class="dash" x1="45" y1="351" x2="1115" y2="351"/>
+  <circle class="coral" cx="66" cy="383" r="5"/>
+  <text class="ink" x="82" y="388" font-size="14" font-weight="700">Authority 被委派</text>
+  <text class="muted" x="278" y="388" font-size="14">→</text>
+  <text class="ink" x="306" y="388" font-size="14" font-weight="700">policy 限制使用條件</text>
+  <text class="muted" x="550" y="388" font-size="14">→</text>
+  <text class="ink" x="580" y="388" font-size="14" font-weight="700">automation 執行被授予的權限</text>
+</svg>

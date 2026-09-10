@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 410" role="img" aria-label="Evidence 的涵蓋範圍，以及需要透過獨立確認補足的需求意圖與風險判斷">
+  <defs>
+    <style>
+      .bg{fill:#f6f9fb;stroke:#e2e8f0;}
+      .card{fill:#ffffff;stroke:#dbe4ec;}
+      .ink{fill:#0b1728;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .muted{fill:#708199;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;}
+      .mint{fill:#179f7c;}
+      .mint-text{fill:#178b6b;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;font-weight:700;}
+      .purple{fill:#7067b7;}
+      .purple-text{fill:#554c9a;font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;font-weight:700;}
+      .arrow{stroke:#708199;stroke-width:2;fill:none;}
+      .head{fill:#708199;}
+      .rule{stroke:#e3e9ef;stroke-width:1;}
+      .check{fill:none;stroke:#179f7c;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+      .dot{fill:#7067b7;}
+    </style>
+  </defs>
+
+  <rect class="bg" x="0.5" y="0.5" width="1099" height="409" rx="16"/>
+  <text class="ink" x="550" y="39" text-anchor="middle" font-size="21" font-weight="700">Evidence 能證明到哪裡？</text>
+  <text class="muted" x="550" y="64" text-anchor="middle" font-size="13">結論只涵蓋已定義的版本、環境、輸入與驗收條件</text>
+
+  <g>
+    <rect class="card" x="34" y="100" width="450" height="226" rx="14"/>
+    <rect class="mint" x="34" y="100" width="450" height="54" rx="14"/>
+    <rect class="mint" x="34" y="136" width="450" height="18"/>
+    <text x="58" y="135" fill="#fff" font-size="16" font-weight="700" font-family="'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif">Evidence 可以支持的範圍</text>
+    <text class="muted" x="72" y="188" font-size="14">確切的程式碼版本</text>
+    <text class="muted" x="72" y="220" font-size="14">工具、依賴與執行參數</text>
+    <text class="muted" x="72" y="252" font-size="14">設定、輸入與必要環境</text>
+    <text class="muted" x="72" y="284" font-size="14">測試與其他機器檢查結果</text>
+    <path class="check" d="M49 183l6 6 11-13"/>
+    <path class="check" d="M49 215l6 6 11-13"/>
+    <path class="check" d="M49 247l6 6 11-13"/>
+    <path class="check" d="M49 279l6 6 11-13"/>
+  </g>
+
+  <g>
+    <rect class="card" x="616" y="100" width="450" height="226" rx="14"/>
+    <rect class="purple" x="616" y="100" width="450" height="54" rx="14"/>
+    <rect class="purple" x="616" y="136" width="450" height="18"/>
+    <text x="640" y="135" fill="#fff" font-size="16" font-weight="700" font-family="'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif">仍需獨立確認的部分</text>
+    <text class="muted" x="654" y="188" font-size="14">需求意圖與設計取捨</text>
+    <text class="muted" x="654" y="220" font-size="14">未被檢查完整覆蓋的風險</text>
+    <text class="muted" x="654" y="252" font-size="14">每項需求的對應結果或 N/A</text>
+    <text class="muted" x="654" y="284" font-size="14">findings 與處理結果</text>
+    <circle class="dot" cx="631" cy="183" r="4"/>
+    <circle class="dot" cx="631" cy="215" r="4"/>
+    <circle class="dot" cx="631" cy="247" r="4"/>
+    <circle class="dot" cx="631" cy="279" r="4"/>
+  </g>
+
+  <g>
+    <line class="arrow" x1="494" y1="213" x2="606" y2="213"/>
+    <polygon class="head" points="612,213 602,207 602,219"/>
+    <text class="purple-text" x="550" y="198" text-anchor="middle" font-size="13">Attestation</text>
+  </g>
+
+  <text class="ink" x="550" y="367" text-anchor="middle" font-size="14" font-weight="700">LLM review 可以提供有價值的審查意見，但不能把判斷直接當成可重現的證據</text>
+</svg>
