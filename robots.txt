@@ -1,4 +1,4 @@
 User-agent: *
-Allow: /
-
+Disallow:
 Sitemap: https://yishiashia.github.io/sitemap.xml
+Sitemap: https://yishiashia.github.io/sitemap-gsc.xml
